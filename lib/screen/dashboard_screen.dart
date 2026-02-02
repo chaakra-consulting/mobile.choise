@@ -105,7 +105,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
                   onPressed: () {
-                    Get.to(ExamDashboard());
+                    Get.to(() => ExamDashboard());
                   },
                   child: Text(
                     "Kerjakan",

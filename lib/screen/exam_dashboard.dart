@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_text_fields/material_text_fields.dart';
 import 'package:material_text_fields/theme/material_text_field_theme.dart';
+import 'package:mobile_choise/screen/exam_test/cfit_test_screen.dart';
 import 'package:mobile_choise/utils/hex_color.dart';
 
 class ExamDashboard extends StatefulWidget {
@@ -189,7 +191,9 @@ class _ExamDashboardState extends State<ExamDashboard> {
                           Padding(
                             padding: EdgeInsets.only(left: width / 7),
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Get.to(() => CfitTestScreen());
+                              },
                               child: Text(
                                 "Kerjakan",
                                 style: GoogleFonts.poppins(
