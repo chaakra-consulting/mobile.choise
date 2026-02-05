@@ -8,6 +8,7 @@ import 'package:mobile_choise/screen/auth/login_screen.dart';
 import 'package:mobile_choise/screen/exam_dashboard.dart';
 import 'package:mobile_choise/utils/hex_color.dart';
 import 'package:mobile_choise/widgets/clock_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -18,6 +19,23 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  String userName = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserData();
+  }
+
+  void getUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var name = prefs.getString('nama_pelamar');
+    setState(() {
+      userName = name!.split(' ')[0];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -53,7 +71,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
                     Text(
-                      "Muhammad",
+                      userName,
                       style: GoogleFonts.poppins(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,

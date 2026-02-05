@@ -13,7 +13,7 @@ void redirectToExam(String name, BuildContext context) {
       Get.to(() => CepatTelitiTestScreen());
       break;
     case 'Tes Intelegensi 1 (CFIT)':
-      Get.to(() => CfitTestScreen());
+      Get.to(() => CfitTestScreen(targetSubtes: 1));
       break;
     case 'Tes Tipe Kepribadian':
       Get.to(() => DISCTestScreen());

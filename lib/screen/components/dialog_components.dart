@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile_choise/utils/hex_color.dart';
 
 void showErrorDialog(String title, String message, BuildContext context) {
   showDialog(
@@ -13,7 +15,7 @@ void showErrorDialog(String title, String message, BuildContext context) {
             const SizedBox(width: 8),
             Text(
               title,
-              style: TextStyle(
+              style: GoogleFonts.poppins(
                 color: Color(0xFF1A1A1A),
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -23,14 +25,12 @@ void showErrorDialog(String title, String message, BuildContext context) {
         ),
         content: Text(
           message,
-          style: TextStyle(color: Color(0xFF666666), fontSize: 14),
+          style: GoogleFonts.poppins(color: Color(0xFF666666), fontSize: 14),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            // style: TextButton.styleFrom(
-            //   foregroundColor: _themeManager.currentColors.primary,
-            // ),
+            style: TextButton.styleFrom(foregroundColor: HexColor('FBC02D')),
             child: const Text('OK'),
           ),
         ],

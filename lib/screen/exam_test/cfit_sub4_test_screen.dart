@@ -19,15 +19,15 @@ import 'package:mobile_choise/utils/hex_color.dart';
 import 'package:mobile_choise/widgets/clock_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CfitTestScreen extends StatefulWidget {
-  const CfitTestScreen({super.key, required this.targetSubtes});
+class CfitSub4TestScreen extends StatefulWidget {
+  const CfitSub4TestScreen({super.key, required this.targetSubtes});
   final int targetSubtes;
 
   @override
-  State<CfitTestScreen> createState() => _CfitTestScreenState();
+  State<CfitSub4TestScreen> createState() => _CfitSub4TestScreenState();
 }
 
-class _CfitTestScreenState extends State<CfitTestScreen> {
+class _CfitSub4TestScreenState extends State<CfitSub4TestScreen> {
   final List<String> items = List<String>.generate(20, (i) => i.toString());
   int subtes = 1;
   int nomorSoal = 1;
@@ -37,6 +37,7 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
   String keyAnswer = "";
   String keyAnswer2 = "";
   List alphabeticOrder = List<String>.from(["a", "b", "c", "d", "e", "f"]);
+  List images = [];
   // String selectedAlpha = "";
   String selectedAnswer = "";
   int selectedIndex = -1;
@@ -50,6 +51,7 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
     });
     loadAnswer();
     loadQuestion();
+    loadImages();
   }
 
   void setAnswer() async {
@@ -83,6 +85,24 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
     } catch (e) {
       showErrorDialog("Error", "Elemen tidak ditemukan", context);
     }
+  }
+
+  void loadImages() {
+    setState(() {
+      images = [];
+    });
+
+    setState(() {
+      if (questions.isNotEmpty) {
+        images.addAll([
+          questions[nomorSoal - 1].opsiA,
+          questions[nomorSoal - 1].opsiB,
+          questions[nomorSoal - 1].opsiC,
+          questions[nomorSoal - 1].opsiD,
+          questions[nomorSoal - 1].opsiE,
+        ]);
+      }
+    });
   }
 
   void loadAnswer() async {
@@ -122,6 +142,7 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
               }).toList(),
             );
           });
+          loadImages();
           setAnswer();
           isLoading = false;
 
@@ -157,7 +178,7 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
         url,
         headers: {"Authorization": "Bearer ${prefs.getString('token')}"},
       );
-      // print(response.body);
+      print(response.body);
 
       if (mounted) {
         if (response.statusCode == 200) {
@@ -188,6 +209,7 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
           });
 
           isLoading = false;
+          loadImages();
           // print(getSorted(examData));
         } else {
           setState(() {
@@ -249,6 +271,7 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
     }
     setState(() {
       nomorSoal += 1;
+      selectedIndex = -1;
     });
     print(nomorSoal);
     loadAnswer();
@@ -456,7 +479,7 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
           child: ListView(
             children: [
               SizedBox(height: 25),
-              showCFITInstructions(1, context),
+              showCFITInstructions(subtes, context),
               SizedBox(height: 10),
               Container(
                 width: width / 1.2,
@@ -506,7 +529,7 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
                   height: 100,
                   width: width / 1.3,
                   imageUrl:
-                      "$choiseUrl/upload/bank_soal/cfit/soal$nomorSoal.jpg",
+                      "$choiseUrl/upload/bank_soal/cfit/${questions.isEmpty ? 0 : questions[nomorSoal - 1].soal!}",
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                       Center(
                         child: CircularProgressIndicator(
@@ -538,7 +561,7 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
                     childAspectRatio: 1.0,
                     crossAxisCount: 3,
                     children: List.generate(
-                      6,
+                      5,
                       (index) => Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: GestureDetector(
@@ -554,6 +577,7 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
                                   .jawaban!;
                             });
                             sendAnswer();
+                            // loadAnswer();
                             // print("Selected choice: ${alphabeticOrder[index]}");
                           },
                           child: Container(
@@ -575,7 +599,7 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
                               height: 100,
                               width: width / 1.3,
                               imageUrl:
-                                  "$choiseUrl/upload/bank_soal/cfit/$nomorSoal${alphabeticOrder[index]}.jpg",
+                                  "$choiseUrl/upload/bank_soal/cfit/${images.isEmpty ? 0 : images[index]}",
                               progressIndicatorBuilder:
                                   (context, url, downloadProgress) => Center(
                                     child: CircularProgressIndicator(

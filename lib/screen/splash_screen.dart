@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:mobile_choise/screen/auth/login_screen.dart';
+import 'package:mobile_choise/screen/dashboard_screen.dart';
 import 'package:mobile_choise/utils/hex_color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,12 +26,11 @@ class _SplashScreenState extends State<SplashScreen> {
     WidgetsFlutterBinding.ensureInitialized();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
-    var userName = prefs.getString('nama');
     // runApp(MaterialApp(home: email == null ? Login() : Home()));
     Timer(const Duration(seconds: 3), () {
-      // Get.offAll(token == null ? const LoginPage() : DashboardPage(userName: userName!));
+      Get.offAll(token == null ? const LoginScreen() : DashboardScreen());
       // Get.offAll(token == null ? const LoginPage() : const JurnalBaruPage());
-      Get.offAll(const LoginScreen());
+      // Get.offAll(const LoginScreen());
     });
   }
 

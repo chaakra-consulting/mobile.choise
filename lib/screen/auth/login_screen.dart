@@ -71,6 +71,10 @@ class _LoginScreenState extends State<LoginScreen> {
               data['user']['id_pelamar'].toString(),
             );
             prefs.setString("token", data['token']);
+            prefs.setString(
+              "nama_pelamar",
+              data['user']['UserData']['nama_pelamar'],
+            );
 
             // Show success message
             ScaffoldMessenger.of(context).showSnackBar(
