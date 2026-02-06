@@ -166,11 +166,35 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
               children: [
                 TableRow(
                   children: [
-                    Padding(padding: EdgeInsets.all(8.0), child: Text('M')),
-                    Padding(padding: EdgeInsets.all(8.0), child: Text('L')),
                     Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Text('Pernyataan'),
+                      child: Text(
+                        'M',
+                        style: GoogleFonts.poppins(
+                          color: HexColor("454545"),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'L',
+                        style: GoogleFonts.poppins(
+                          color: HexColor("454545"),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Pernyataan',
+                        style: GoogleFonts.poppins(
+                          color: HexColor("454545"),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -204,7 +228,7 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
                     ),
                     Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Text('lorem ipsum dolor sit amet'),
+                      child: Text("Sederhana, Mudah Menerima, Rendah Hati"),
                     ),
                   ],
                 ),
