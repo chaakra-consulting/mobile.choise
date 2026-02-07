@@ -6,7 +6,6 @@ import 'package:mobile_choise/screen/components/carousel_card.dart';
 import 'package:mobile_choise/screen/components/complete_test.dart';
 import 'package:mobile_choise/utils/hex_color.dart';
 import 'package:mobile_choise/widgets/clock_widget.dart';
-import 'package:scroll_table/scroll_table.dart';
 
 class DISCTestScreen extends StatefulWidget {
   const DISCTestScreen({super.key});
