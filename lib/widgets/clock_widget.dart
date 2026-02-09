@@ -6,8 +6,15 @@ import 'package:mobile_choise/screen/exam_dashboard.dart'; // import 'package:in
 
 class ClockWidget extends StatefulWidget {
   // class ClockWidget extends StatelessWidget {
-  const ClockWidget({super.key, required this.textStyle});
+  const ClockWidget({
+    super.key,
+    required this.textStyle,
+    required this.timeSeconds,
+    this.redirectTo,
+  });
+  final Function? redirectTo;
   final TextStyle textStyle;
+  final int timeSeconds;
 
   @override
   State<ClockWidget> createState() => _ClockWidgetState();
@@ -20,6 +27,9 @@ class _ClockWidgetState extends State<ClockWidget> {
   @override
   void initState() {
     super.initState();
+    setState(() {
+      _startSeconds = widget.timeSeconds;
+    });
     startTimer();
   }
 
@@ -40,7 +50,8 @@ class _ClockWidgetState extends State<ClockWidget> {
               duration: Duration(seconds: 2),
             ),
           );
-          Get.off(() => ExamDashboard());
+          // Get.off(() => ExamDashboard());
+          widget.redirectTo!();
         });
       } else {
         setState(() {

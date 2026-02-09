@@ -60,14 +60,20 @@ class ExamCard extends StatelessWidget {
               ),
             ),
             SizedBox(height: 5),
-            Text(
-              "${DateFormat.Hm().format(waktuMulai)} - ${DateFormat('HH:mm').format(waktuAkhir)} ",
-              style: GoogleFonts.poppins(
-                color: status ? Colors.white : HexColor("A6A6A6"),
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
+            Container(
+              width: width / 2,
+              height: 20,
+              child: Text(
+                overflow: TextOverflow.ellipsis,
+                "${DateFormat('yy-MM-dd').format(waktuMulai)} ${DateFormat.Hm().format(waktuMulai)} - ${DateFormat('HH:mm').format(waktuAkhir)} ",
+                style: GoogleFonts.poppins(
+                  color: status ? Colors.white : HexColor("A6A6A6"),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
+
             Padding(
               padding: EdgeInsets.only(left: width / 7),
               child: TextButton(
