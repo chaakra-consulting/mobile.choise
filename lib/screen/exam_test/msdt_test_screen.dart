@@ -411,6 +411,10 @@ class _MSDTTestScreenState extends State<MSDTTestScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: ClockWidget(
+              timeSeconds: 3600,
+              redirectTo: () {
+                Get.to(() => CompleteTest(title: "Tes Tipe Kepemimpinan"));
+              },
               textStyle: GoogleFonts.poppins(
                 color: HexColor('828282'),
                 fontSize: 15,

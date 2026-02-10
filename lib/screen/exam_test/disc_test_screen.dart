@@ -46,6 +46,7 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
 
   void setAllChoice() {
     var question = questions.where((element) => element.idSoal == nomorSoal);
+
     if (question.isNotEmpty) {
       setState(() {
         lChoice = [
@@ -345,17 +346,19 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
             );
             isLoading = false;
           });
-
-          setState(() {
-            selectedLOption = answers
-                .where((e) => e.noSoal == nomorSoal)
-                .first
-                .jawaban2;
-            selectedMOption = answers
-                .where((e) => e.noSoal == nomorSoal)
-                .first
-                .jawaban;
-          });
+          print(answers.where((e) => e.noSoal == nomorSoal).isNotEmpty);
+          if (answers.where((e) => e.noSoal == nomorSoal).isNotEmpty) {
+            setState(() {
+              selectedLOption = answers
+                  .where((e) => e.noSoal == nomorSoal)
+                  .first
+                  .jawaban2;
+              selectedMOption = answers
+                  .where((e) => e.noSoal == nomorSoal)
+                  .first
+                  .jawaban;
+            });
+          }
         } else {
           setState(() {
             isLoading = false;
@@ -444,6 +447,9 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
             padding: const EdgeInsets.only(right: 10),
             child: ClockWidget(
               timeSeconds: 1800,
+              redirectTo: () {
+                Get.to(() => CompleteTest(title: "Tes Tipe Kepribadian"));
+              },
               textStyle: GoogleFonts.poppins(
                 color: HexColor('828282'),
                 fontSize: 15,

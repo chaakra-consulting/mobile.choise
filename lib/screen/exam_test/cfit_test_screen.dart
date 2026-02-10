@@ -437,6 +437,10 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: ClockWidget(
+              timeSeconds: 180,
+              redirectTo: () {
+                Get.to(() => CfitSub2TestScreen(targetSubtes: 2));
+              },
               textStyle: GoogleFonts.poppins(
                 color: HexColor('828282'),
                 fontSize: 15,

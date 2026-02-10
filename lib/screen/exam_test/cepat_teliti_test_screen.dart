@@ -427,6 +427,10 @@ class _CepatTelitiTestScreenState extends State<CepatTelitiTestScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: ClockWidget(
+              timeSeconds: 720,
+              redirectTo: () {
+                Get.to(() => CompleteTest(title: "Tes Cepat Teliti"));
+              },
               textStyle: GoogleFonts.poppins(
                 color: HexColor('828282'),
                 fontSize: 15,

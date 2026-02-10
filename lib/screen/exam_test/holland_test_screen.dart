@@ -183,6 +183,10 @@ class _HollandTestScreenState extends State<HollandTestScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: ClockWidget(
+              timeSeconds: 1200,
+              redirectTo: () {
+                Get.to(() => CompleteTest(title: "Ujian Holland"));
+              },
               textStyle: GoogleFonts.poppins(
                 color: HexColor('828282'),
                 fontSize: 15,
