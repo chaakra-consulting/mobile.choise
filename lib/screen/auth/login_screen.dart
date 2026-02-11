@@ -43,6 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;
+        textButton = "Loading...";
       });
 
       try {
@@ -60,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (mounted) {
           setState(() {
             isLoading = false;
-            textButton = "Loading...";
+            textButton = "Login";
           });
 
           if (response.statusCode == 200) {
@@ -108,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
           });
           showErrorDialog(
             "Gagal",
-            "Gagal login. Periksa koneksi internet anda dan coba lagi",
+            "Periksa koneksi internet anda dan coba lagi",
             context,
           );
         }
