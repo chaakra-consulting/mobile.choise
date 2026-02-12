@@ -24,7 +24,7 @@ class ExamCard extends StatelessWidget {
     var width = MediaQuery.of(context).size.width;
     return Container(
       width: width / 5,
-      height: height / 4.3 + 22,
+      height: height / 4.2,
       decoration: BoxDecoration(
         border: Border.all(color: HexColor('FBC02D'), width: 2),
         color: status ? HexColor('FBC02D') : Colors.white,
@@ -77,9 +77,11 @@ class ExamCard extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(left: width / 7),
               child: TextButton(
-                onPressed: () {
-                  redirectToExam(title, context);
-                },
+                onPressed: !status
+                    ? null
+                    : () {
+                        redirectToExam(title, context);
+                      },
                 child: Text(
                   status ? "Kerjakan" : "Berakhir",
                   style: GoogleFonts.poppins(

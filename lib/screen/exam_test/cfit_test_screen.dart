@@ -98,7 +98,7 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
         url,
         headers: {"Authorization": "Bearer ${prefs.getString('token')}"},
       );
-      // print(response.body);
+      print(response.body);
 
       if (mounted) {
         if (response.statusCode == 200) {
@@ -157,7 +157,7 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
         url,
         headers: {"Authorization": "Bearer ${prefs.getString('token')}"},
       );
-      // print(response.body);
+      print(response.body);
 
       if (mounted) {
         if (response.statusCode == 200) {

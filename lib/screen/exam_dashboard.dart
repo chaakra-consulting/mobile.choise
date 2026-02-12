@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -20,6 +21,7 @@ import 'package:mobile_choise/utils/base_url.dart';
 import 'package:mobile_choise/utils/hex_color.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_choise/utils/redirect_screen.dart';
+import 'package:mobile_choise/utils/timezone.dart';
 
 class ExamDashboard extends StatefulWidget {
   const ExamDashboard({super.key});
@@ -29,7 +31,9 @@ class ExamDashboard extends StatefulWidget {
 }
 
 class _ExamDashboardState extends State<ExamDashboard> {
+  late Timer timer;
   bool isLoading = false;
+  bool isTzNotMatch = false;
   List<ExamList> examList = [];
   List<ExamList> examData = [];
 
@@ -38,6 +42,16 @@ class _ExamDashboardState extends State<ExamDashboard> {
     // TODO: implement initState
     super.initState();
     loadSchedule();
+    // timer = Timer.periodic(
+    //   const Duration(minutes: 1), // or seconds: 60
+    //   (Timer t) => loadSchedule(),
+    // );
+  }
+
+  @override
+  void dispose() {
+    timer.cancel(); // Cancel the timer when the widget is removed
+    super.dispose();
   }
 
   List<ExamList> getSorted(List<ExamList> allExams) {
@@ -47,7 +61,21 @@ class _ExamDashboardState extends State<ExamDashboard> {
     //   ..sort((a, b) => a.waktuMulai.compareTo(b.waktuMulai));
   }
 
+  void checkTheTimezone() {
+    if (mounted) {
+      if (getUtcOffset() != "UTC+8") {
+        setState(() {
+          isTzNotMatch = true;
+        });
+        // Get.offAll(() => const DashboardScreen());
+      } else {
+        isTzNotMatch = false;
+      }
+    }
+  }
+
   void loadSchedule() async {
+    checkTheTimezone();
     setState(() {
       isLoading = true;
       examList = [];
@@ -63,6 +91,8 @@ class _ExamDashboardState extends State<ExamDashboard> {
         if (response.statusCode == 200) {
           DateTime now = DateTime.now();
           var data = jsonDecode(response.body)['data'] as List;
+
+          // print(data);
           // print(DateTime.parse("2026-02-03T14:25:35+07:00").toLocal());
           setState(() {
             examData.addAll(
@@ -264,16 +294,24 @@ class _ExamDashboardState extends State<ExamDashboard> {
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 10,
+                                crossAxisSpacing: 7,
+                                mainAxisSpacing: 7,
                               ),
                           itemCount: examList.length,
                           itemBuilder: (context, index) {
+                            // print(examList[index].namaUjian);
+                            // print(
+                            //   DateTime.now().isBefore(
+                            //     examList[index].waktuAkhir,
+                            //   ),
+                            // );
                             return ExamCard(
                               title: examList[index].namaUjian,
                               status: DateTime.now().isBefore(
                                 examList[index].waktuAkhir,
                               ),
+                              // &&
+                              // isTzNotMatch == true,
                               waktuMulai: examList[index].waktuMulai,
                               waktuAkhir: examList[index].waktuAkhir,
                             );

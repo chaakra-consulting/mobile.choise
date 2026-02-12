@@ -10,19 +10,19 @@ import 'package:mobile_choise/screen/exam_test/msdt_test_screen.dart';
 void redirectToExam(String name, BuildContext context) {
   switch (name) {
     case 'Tes Cepat Teliti ':
-      Get.to(() => CepatTelitiTestScreen());
+      Get.to(() => CepatTelitiTestScreen()); //done
       break;
-    case 'Tes Intelegensi 1 (CFIT)':
-      Get.to(() => CfitTestScreen(targetSubtes: 1));
+    case 'Tes Intelegensi 1 (CFIT) ':
+      Get.to(() => CfitTestScreen(targetSubtes: 1)); //done
       break;
     case 'Tes Tipe Kepribadian':
       Get.to(() => DISCTestScreen());
       break;
     case 'Tes Minat Kerja':
-      Get.to(() => HollandTestScreen());
+      Get.to(() => HollandTestScreen()); //done
       break;
     case 'Tes Tipe Kepemimpinan ':
-      Get.to(() => MSDTTestScreen());
+      Get.to(() => MSDTTestScreen()); //done
       break;
     default:
       showErrorDialog("Error", "Ada kesalahan", context);

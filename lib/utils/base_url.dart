@@ -1,6 +1,6 @@
-const host = "192.168.100.59:8080";
+const host = "api.choise.chaakra-consulting.com";
 
-const baseUrl = "http://$host";
+const baseUrl = "https://$host";
 
 const choiseUrl = "https://choise.chaakra-consulting.com";
 

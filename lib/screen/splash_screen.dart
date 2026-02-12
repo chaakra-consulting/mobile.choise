@@ -28,9 +28,9 @@ class _SplashScreenState extends State<SplashScreen> {
     var token = prefs.getString('token');
     // runApp(MaterialApp(home: email == null ? Login() : Home()));
     Timer(const Duration(seconds: 3), () {
-      Get.offAll(token == null ? const LoginScreen() : DashboardScreen());
+      // Get.offAll(token == null ? const LoginScreen() : DashboardScreen());
       // Get.offAll(token == null ? const LoginPage() : const JurnalBaruPage());
-      // Get.offAll(const LoginScreen());
+      Get.offAll(const LoginScreen());
     });
   }
 
@@ -80,12 +80,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(top: height / 20),
-              child: Center(
-                child: Image.asset('assets/images/chaakra.png', height: 60),
-              ),
-            ),
+            Center(child: Image.asset('assets/images/chaakra.png', height: 60)),
           ],
         ),
       ),
