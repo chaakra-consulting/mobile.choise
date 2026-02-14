@@ -36,7 +36,7 @@ class ExamCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 25),
+            SizedBox(height: 10),
             Container(
               width: width / 3,
               height: 30,

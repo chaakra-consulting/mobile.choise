@@ -122,7 +122,7 @@ class _ExamDashboardState extends State<ExamDashboard> {
           // Show error message
           showErrorDialog(
             "Gagal",
-            "Gagal login. Periksa kembali username dan password anda",
+            "Ada kesalahan. Periksa koneksi internet anda dan coba lagi",
             context,
           );
         }
@@ -133,11 +133,7 @@ class _ExamDashboardState extends State<ExamDashboard> {
         setState(() {
           isLoading = false;
         });
-        showErrorDialog(
-          "Gagal",
-          "Gagal login. Periksa koneksi internet anda dan coba lagi",
-          context,
-        );
+        showErrorDialog("Gagal", e.toString(), context);
       }
     }
   }
@@ -247,7 +243,7 @@ class _ExamDashboardState extends State<ExamDashboard> {
                 Padding(padding: EdgeInsets.only(top: 20)),
                 Container(
                   width: width / 5,
-                  height: height / 8.5,
+                  height: height / 8,
                   decoration: BoxDecoration(
                     color: HexColor('FBC02D'),
                     borderRadius: BorderRadius.circular(10),
@@ -258,7 +254,7 @@ class _ExamDashboardState extends State<ExamDashboard> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 25),
+                        SizedBox(height: 15),
                         Text(
                           "Perhatian",
                           style: GoogleFonts.poppins(
