@@ -177,7 +177,7 @@ class _ExamDashboardState extends State<ExamDashboard> {
                             "Silahkan",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-    fontFamily: 'Poppins',
+                              fontFamily: 'Poppins',
                               color: HexColor('454545'),
                               fontSize: 27,
                               fontWeight: FontWeight.w900,
@@ -187,7 +187,7 @@ class _ExamDashboardState extends State<ExamDashboard> {
                             "mengerjakan ujian",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-    fontFamily: 'Poppins',
+                              fontFamily: 'Poppins',
                               color: HexColor('454545'),
                               fontSize: 27,
                               fontWeight: FontWeight.w900,
@@ -197,7 +197,7 @@ class _ExamDashboardState extends State<ExamDashboard> {
                             "yang disediakan",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-    fontFamily: 'Poppins',
+                              fontFamily: 'Poppins',
                               color: HexColor('454545'),
                               fontSize: 27,
                               fontWeight: FontWeight.w900,
@@ -205,13 +205,6 @@ class _ExamDashboardState extends State<ExamDashboard> {
                           ),
                         ],
                       ),
-                      // ClockWidget(
-                      //   textStyle: TextStyle(
-    fontFamily: 'Poppins',
-                      //     color: HexColor('828282'),
-                      //     fontSize: 15,
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),
@@ -234,7 +227,7 @@ class _ExamDashboardState extends State<ExamDashboard> {
                       enabledColor: HexColor('AEAEAE'),
                       prefixIconColor: HexColor('1C2D57'),
                       hintStyle: TextStyle(
-    fontFamily: 'Poppins',
+                        fontFamily: 'Poppins',
                         color: HexColor('8189B0'),
                         fontSize: 15,
                       ),
@@ -263,7 +256,7 @@ class _ExamDashboardState extends State<ExamDashboard> {
                         Text(
                           "Perhatian",
                           style: TextStyle(
-    fontFamily: 'Poppins',
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -272,7 +265,7 @@ class _ExamDashboardState extends State<ExamDashboard> {
                         Text(
                           "Harap menggunakan zona waktu indonesia barat sebelum mengerjakan test",
                           style: TextStyle(
-    fontFamily: 'Poppins',
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
