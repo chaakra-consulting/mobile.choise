@@ -21,7 +21,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
         backgroundColor: HexColor('FBC02D'),
         title: Text(
           "INSTRUKSI TES!",
-          style: GoogleFonts.poppins(
+          style: TextStyle(
+            fontFamily: 'Poppins',
             color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -36,7 +37,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
               children: [
                 Text(
                   "1. Pada ujian CFIT ini akan terdapat 4 macam subtes.",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -44,7 +46,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                 ),
                 Text(
                   "2. Untuk subtes pertama, pilihlah kotak yang dapat melanjutkan pola sebelumnya!",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -78,7 +81,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "a",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -112,7 +116,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "b",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -146,7 +151,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "c",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -180,7 +186,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "d",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -214,7 +221,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "e",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -248,7 +256,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "f",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -282,7 +291,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                 SizedBox(height: 25),
                 Text(
                   "Jawaban: (c) karena ranting pohon perlahan bergerak ke kanan.",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -307,7 +317,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
         backgroundColor: HexColor('FBC02D'),
         title: Text(
           "INSTRUKSI TES!",
-          style: GoogleFonts.poppins(
+          style: TextStyle(
+            fontFamily: 'Poppins',
             color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -322,7 +333,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
               children: [
                 Text(
                   "1. Disetiap soal terdapat 5 kotak yang didalamnya memiliki gambar yang berbeda-beda, dimana 3 kotak diantaranya memiliki gambar yang sama.",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -330,7 +342,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                 ),
                 Text(
                   "2. Tugas anda, carilah 2 kotak dengan gambar yang berbeda dari 3 diantaranya. Kemudian isikan 2 (dua) abjadnya pada pilihan jawaban yang tersedia di masing-masing soal.",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -338,7 +351,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                 ),
                 Text(
                   "3. INGAT: 1 Soal berisi 2 jawaban!",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -352,7 +366,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "a",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -386,7 +401,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "b",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -420,7 +436,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "c",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -454,7 +471,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "d",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -488,7 +506,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "e",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -522,7 +541,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                 SizedBox(height: 25),
                 Text(
                   "Jawaban: (b) dan (d). Karena memiliki bukan berbentuk segitiga seperti yang lainnya.",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -547,7 +567,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
         backgroundColor: HexColor('FBC02D'),
         title: Text(
           "INSTRUKSI TES!",
-          style: GoogleFonts.poppins(
+          style: TextStyle(
+            fontFamily: 'Poppins',
             color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -562,7 +583,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
               children: [
                 Text(
                   "1. Disetiap soal terdapat sebuah kotak besar, dimana didalamnya terdapat 4 buah kotak kecil.",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -570,7 +592,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                 ),
                 Text(
                   "2. Tiga kotak kecil diantaranya sudah terisi dengan pola/urutan tertentu.",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -578,7 +601,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                 ),
                 Text(
                   "3.Tugas anda: Carilah 1 dari 5 pilihan jawaban yang ada untuk mengisi kotak kosong ke-4 sehingga menjadi berurutan satu sama lain!",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -611,7 +635,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "a",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -645,7 +670,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "b",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -679,7 +705,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "c",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -713,7 +740,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "d",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -747,7 +775,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "e",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -781,7 +810,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "f",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -815,7 +845,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                 SizedBox(height: 25),
                 Text(
                   "Jawaban: (b). Karena sesuai untuk mengisi kotak kecil yang kosong tersebut",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -840,7 +871,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
         backgroundColor: HexColor('FBC02D'),
         title: Text(
           "INSTRUKSI TES!",
-          style: GoogleFonts.poppins(
+          style: TextStyle(
+            fontFamily: 'Poppins',
             color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -855,7 +887,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
               children: [
                 Text(
                   "1. Disetiap soal terdapat sebuah kotak besar, dimana didalamnya terdapat 2 bangun yang saling beririsan satu sama lain.",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -863,7 +896,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                 ),
                 Text(
                   "2. Irisan 2 bangun tersebut, ditandai dengan sebuah tanda titik (.)",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -871,7 +905,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                 ),
                 Text(
                   "3. Tugas anda, Mencari kesamaan gambar soal dengan 5 pilihan gambar yang ada di masing-masing jawaban.",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -879,7 +914,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                 ),
                 Text(
                   "4. INGAT: Tanda titik (.) akan dihilangkan pada masing-masing pilihan jawaban, sehingga visualisasikan gambar soal dgn pilihan jawaban yang tersedia.",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -912,7 +948,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "a",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -946,7 +983,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "b",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -980,7 +1018,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "c",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -1014,7 +1053,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "d",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -1048,7 +1088,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                       children: [
                         Text(
                           "e",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -1082,7 +1123,8 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
                 SizedBox(height: 25),
                 Text(
                   "Jawaban: (c). Karena pola tersebut dapat diletakkan titik yang sama seperti pada soal.",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,

@@ -57,7 +57,8 @@ class _FindEmailScreenState extends State<FindEmailScreen> {
                       SizedBox(width: 10),
                       Text(
                         "Lupa Password",
-                        style: GoogleFonts.poppins(
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
                           fontSize: 25,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
@@ -74,7 +75,8 @@ class _FindEmailScreenState extends State<FindEmailScreen> {
             padding: const EdgeInsets.only(left: 20.0),
             child: Text(
               "Lupa Password",
-              style: GoogleFonts.poppins(
+              style: TextStyle(
+                fontFamily: 'Poppins',
                 fontSize: 35,
                 fontWeight: FontWeight.bold,
                 color: HexColor('454545'),
@@ -85,7 +87,8 @@ class _FindEmailScreenState extends State<FindEmailScreen> {
             padding: const EdgeInsets.only(left: 20.0),
             child: Text(
               "Masukkan email yang anda gunakan saat mendaftar. ",
-              style: GoogleFonts.poppins(
+              style: TextStyle(
+                fontFamily: 'Poppins',
                 fontSize: 15,
                 fontWeight: FontWeight.w300,
                 color: HexColor('454545'),
@@ -99,7 +102,8 @@ class _FindEmailScreenState extends State<FindEmailScreen> {
             padding: const EdgeInsets.only(bottom: 4, left: 17),
             child: Text(
               "Email",
-              style: GoogleFonts.poppins(
+              style: TextStyle(
+                fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700,
                 color: HexColor('828282'),
                 fontSize: 15,
@@ -124,7 +128,8 @@ class _FindEmailScreenState extends State<FindEmailScreen> {
                 fillColor: Colors.white,
                 prefixIconColor: HexColor('1C2D57'),
                 enabledColor: HexColor('AEAEAE'),
-                hintStyle: GoogleFonts.poppins(
+                hintStyle: TextStyle(
+                  fontFamily: 'Poppins',
                   color: HexColor('8189B0'),
                   fontSize: 18,
                 ),
@@ -179,7 +184,8 @@ class _FindEmailScreenState extends State<FindEmailScreen> {
                   },
                   child: Text(
                     textButton,
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
                       color: Color(0xffffffff),
                       fontWeight: FontWeight.w700,
                       fontSize: 16,

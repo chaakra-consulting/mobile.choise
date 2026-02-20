@@ -176,7 +176,8 @@ class _ExamDashboardState extends State<ExamDashboard> {
                           Text(
                             "Silahkan",
                             textAlign: TextAlign.center,
-                            style: GoogleFonts.poppins(
+                            style: TextStyle(
+    fontFamily: 'Poppins',
                               color: HexColor('454545'),
                               fontSize: 27,
                               fontWeight: FontWeight.w900,
@@ -185,7 +186,8 @@ class _ExamDashboardState extends State<ExamDashboard> {
                           Text(
                             "mengerjakan ujian",
                             textAlign: TextAlign.center,
-                            style: GoogleFonts.poppins(
+                            style: TextStyle(
+    fontFamily: 'Poppins',
                               color: HexColor('454545'),
                               fontSize: 27,
                               fontWeight: FontWeight.w900,
@@ -194,7 +196,8 @@ class _ExamDashboardState extends State<ExamDashboard> {
                           Text(
                             "yang disediakan",
                             textAlign: TextAlign.center,
-                            style: GoogleFonts.poppins(
+                            style: TextStyle(
+    fontFamily: 'Poppins',
                               color: HexColor('454545'),
                               fontSize: 27,
                               fontWeight: FontWeight.w900,
@@ -203,7 +206,8 @@ class _ExamDashboardState extends State<ExamDashboard> {
                         ],
                       ),
                       // ClockWidget(
-                      //   textStyle: GoogleFonts.poppins(
+                      //   textStyle: TextStyle(
+    fontFamily: 'Poppins',
                       //     color: HexColor('828282'),
                       //     fontSize: 15,
                       //   ),
@@ -229,7 +233,8 @@ class _ExamDashboardState extends State<ExamDashboard> {
                       fillColor: Colors.white,
                       enabledColor: HexColor('AEAEAE'),
                       prefixIconColor: HexColor('1C2D57'),
-                      hintStyle: GoogleFonts.poppins(
+                      hintStyle: TextStyle(
+    fontFamily: 'Poppins',
                         color: HexColor('8189B0'),
                         fontSize: 15,
                       ),
@@ -257,7 +262,8 @@ class _ExamDashboardState extends State<ExamDashboard> {
                         SizedBox(height: 15),
                         Text(
                           "Perhatian",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+    fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -265,7 +271,8 @@ class _ExamDashboardState extends State<ExamDashboard> {
                         ),
                         Text(
                           "Harap menggunakan zona waktu indonesia barat sebelum mengerjakan test",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+    fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
@@ -303,9 +310,10 @@ class _ExamDashboardState extends State<ExamDashboard> {
                             // );
                             return ExamCard(
                               title: examList[index].namaUjian,
-                              status: DateTime.now().isBefore(
-                                examList[index].waktuAkhir,
-                              ),
+                              status: true,
+                              // status: DateTime.now().isBefore(
+                              //   examList[index].waktuAkhir,
+                              // ),
                               // &&
                               // isTzNotMatch == true,
                               waktuMulai: examList[index].waktuMulai,

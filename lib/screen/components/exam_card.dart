@@ -43,7 +43,8 @@ class ExamCard extends StatelessWidget {
               child: Text(
                 title,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.poppins(
+                style: TextStyle(
+                  fontFamily: 'Poppins',
                   color: status ? Colors.white : HexColor("A6A6A6"),
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -53,7 +54,8 @@ class ExamCard extends StatelessWidget {
             SizedBox(height: 25),
             Text(
               "${waktuAkhir.difference(waktuMulai).inMinutes} Menit",
-              style: GoogleFonts.poppins(
+              style: TextStyle(
+                fontFamily: 'Poppins',
                 color: status ? Colors.white : HexColor("A6A6A6"),
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
@@ -66,7 +68,8 @@ class ExamCard extends StatelessWidget {
               child: Text(
                 overflow: TextOverflow.ellipsis,
                 "${DateFormat('yy-MM-dd').format(waktuMulai)} ${DateFormat.Hm().format(waktuMulai)} - ${DateFormat('HH:mm').format(waktuAkhir)} ",
-                style: GoogleFonts.poppins(
+                style: TextStyle(
+                  fontFamily: 'Poppins',
                   color: status ? Colors.white : HexColor("A6A6A6"),
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
@@ -84,7 +87,8 @@ class ExamCard extends StatelessWidget {
                       },
                 child: Text(
                   status ? "Kerjakan" : "Berakhir",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
                     color: status ? Colors.white : HexColor("A6A6A6"),

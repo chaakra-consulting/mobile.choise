@@ -49,7 +49,8 @@ class _SplashScreenState extends State<SplashScreen> {
               child: Center(
                 child: Text(
                   "Choise",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     fontWeight: FontWeight.w900,
                     fontSize: 50,
                     color: Colors.white,
@@ -62,7 +63,8 @@ class _SplashScreenState extends State<SplashScreen> {
               child: Center(
                 child: Text(
                   "Chaakra-choise psychotest",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     fontWeight: FontWeight.w500,
                     fontSize: 20,
                     color: Colors.white,

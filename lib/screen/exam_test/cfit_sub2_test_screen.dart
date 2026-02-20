@@ -323,7 +323,8 @@ class _CfitSub2TestScreenState extends State<CfitSub2TestScreen> {
             },
             child: Text(
               subtes == 4 ? "Kirim Jawaban" : "Lanjutkan Ujian",
-              style: GoogleFonts.poppins(
+              style: TextStyle(
+                fontFamily: 'Poppins',
                 color: Color(0xffffffff),
                 fontWeight: FontWeight.w700,
                 fontSize: 18,
@@ -353,7 +354,8 @@ class _CfitSub2TestScreenState extends State<CfitSub2TestScreen> {
             },
             child: Text(
               "Berikutnya",
-              style: GoogleFonts.poppins(
+              style: TextStyle(
+                fontFamily: 'Poppins',
                 color: Color(0xffffffff),
                 fontWeight: FontWeight.w700,
                 fontSize: 18,
@@ -385,7 +387,8 @@ class _CfitSub2TestScreenState extends State<CfitSub2TestScreen> {
                 },
                 child: Text(
                   "Sebelumnya",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Color(0xffffffff),
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
@@ -414,7 +417,8 @@ class _CfitSub2TestScreenState extends State<CfitSub2TestScreen> {
                 },
                 child: Text(
                   "Berikutnya",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Color(0xffffffff),
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
@@ -446,7 +450,8 @@ class _CfitSub2TestScreenState extends State<CfitSub2TestScreen> {
         ),
         title: Text(
           "Ujian CFIT Sub $subtes",
-          style: GoogleFonts.poppins(
+          style: TextStyle(
+            fontFamily: 'Poppins',
             fontSize: 25,
             fontWeight: FontWeight.w500,
             color: HexColor("454545"),
@@ -460,7 +465,8 @@ class _CfitSub2TestScreenState extends State<CfitSub2TestScreen> {
               redirectTo: () {
                 Get.to(() => CfitSub3TestScreen(targetSubtes: 3));
               },
-              textStyle: GoogleFonts.poppins(
+              textStyle: TextStyle(
+                fontFamily: 'Poppins',
                 color: HexColor('828282'),
                 fontSize: 15,
               ),
@@ -518,7 +524,8 @@ class _CfitSub2TestScreenState extends State<CfitSub2TestScreen> {
               Text(
                 "Pertanyaan $nomorSoal",
                 // textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
+                style: TextStyle(
+                  fontFamily: 'Poppins',
                   color: HexColor('454545'),
                   fontSize: 27,
                   fontWeight: FontWeight.w900,

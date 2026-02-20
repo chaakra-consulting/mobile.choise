@@ -52,7 +52,7 @@ class _CepatTelitiTestScreenState extends State<CepatTelitiTestScreen> {
     try {
       var url = Uri.parse("$baseUrl/cepat-teliti-questions");
       final response = await http.get(url);
-      // print(response.body);
+      print(response.body);
 
       if (mounted) {
         if (response.statusCode == 200) {
@@ -294,7 +294,8 @@ class _CepatTelitiTestScreenState extends State<CepatTelitiTestScreen> {
             },
             child: Text(
               "Kirim Jawaban",
-              style: GoogleFonts.poppins(
+              style: TextStyle(
+                fontFamily: 'Poppins',
                 color: Color(0xffffffff),
                 fontWeight: FontWeight.w700,
                 fontSize: 18,
@@ -324,7 +325,8 @@ class _CepatTelitiTestScreenState extends State<CepatTelitiTestScreen> {
             },
             child: Text(
               "Berikutnya",
-              style: GoogleFonts.poppins(
+              style: TextStyle(
+                fontFamily: 'Poppins',
                 color: Color(0xffffffff),
                 fontWeight: FontWeight.w700,
                 fontSize: 18,
@@ -356,7 +358,8 @@ class _CepatTelitiTestScreenState extends State<CepatTelitiTestScreen> {
                 },
                 child: Text(
                   "Sebelumnya",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Color(0xffffffff),
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
@@ -385,7 +388,8 @@ class _CepatTelitiTestScreenState extends State<CepatTelitiTestScreen> {
                 },
                 child: Text(
                   "Berikutnya",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Color(0xffffffff),
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
@@ -417,7 +421,8 @@ class _CepatTelitiTestScreenState extends State<CepatTelitiTestScreen> {
         ),
         title: Text(
           "Tes Cepat Teliti",
-          style: GoogleFonts.poppins(
+          style: TextStyle(
+            fontFamily: 'Poppins',
             fontSize: 25,
             fontWeight: FontWeight.w500,
             color: HexColor("454545"),
@@ -431,7 +436,8 @@ class _CepatTelitiTestScreenState extends State<CepatTelitiTestScreen> {
               redirectTo: () {
                 Get.to(() => CompleteTest(title: "Tes Cepat Teliti"));
               },
-              textStyle: GoogleFonts.poppins(
+              textStyle: TextStyle(
+                fontFamily: 'Poppins',
                 color: HexColor('828282'),
                 fontSize: 15,
               ),
@@ -468,7 +474,8 @@ class _CepatTelitiTestScreenState extends State<CepatTelitiTestScreen> {
                       backgroundColor: HexColor('FBC02D'),
                       title: Text(
                         "INSTRUKSI TES!",
-                        style: GoogleFonts.poppins(
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
                           color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -483,7 +490,8 @@ class _CepatTelitiTestScreenState extends State<CepatTelitiTestScreen> {
                             children: [
                               Text(
                                 "1. Dalam tes ini anda akan dihadapkan pada 100 soal yang akan dikerjakan dalam waktu yg terbatas.",
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -491,7 +499,8 @@ class _CepatTelitiTestScreenState extends State<CepatTelitiTestScreen> {
                               ),
                               Text(
                                 "2. Tes ini bertujuan untuk membandingkan pasangan huruf dan angka yang ada di setiap soalnya.",
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -499,7 +508,8 @@ class _CepatTelitiTestScreenState extends State<CepatTelitiTestScreen> {
                               ),
                               Text(
                                 "3. Di setiap soal terdapat 5 pasang kombinasi huruf dan angka dalam susunan yg berbeda-beda.",
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -507,7 +517,8 @@ class _CepatTelitiTestScreenState extends State<CepatTelitiTestScreen> {
                               ),
                               Text(
                                 '4. Tugas anda adalah mencari "SATU KESAMAAN" kombinasi huruf dan angka yang "DIGARISBAWAHI" di soal dengan pilihan jawaban yang sudah disediakan.',
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -558,7 +569,8 @@ class _CepatTelitiTestScreenState extends State<CepatTelitiTestScreen> {
                     Text(
                       "Pertanyaan $nomorSoal",
                       // textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
                         color: HexColor('454545'),
                         fontSize: 27,
                         fontWeight: FontWeight.w900,
@@ -571,7 +583,8 @@ class _CepatTelitiTestScreenState extends State<CepatTelitiTestScreen> {
                           : "<h1>${questions.where((index) => index.noSoal == nomorSoal).first.soal}</h1>",
                       style: {
                         "p": Style(
-                          fontStyle: GoogleFonts.poppins(
+                          fontStyle: TextStyle(
+                            fontFamily: 'Poppins',
                             color: HexColor('454545'),
                             fontSize: 20,
                             fontWeight: FontWeight.w600,
@@ -637,7 +650,8 @@ class _CepatTelitiTestScreenState extends State<CepatTelitiTestScreen> {
                                           choiceList.isEmpty
                                               ? " "
                                               : choiceList[index],
-                                          style: GoogleFonts.poppins(
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins',
                                             fontSize: 25,
                                             fontWeight: FontWeight.bold,
                                             color: index == selectedIndex

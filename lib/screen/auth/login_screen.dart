@@ -140,7 +140,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Text(
                   "Choise",
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: HexColor('454545'),
                     fontSize: 40,
                     fontWeight: FontWeight.w900,
@@ -152,7 +153,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Text(
                   "Masuk menggunakan akun anda",
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: HexColor('828282'),
                     fontSize: 15,
                   ),
@@ -164,7 +166,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding: const EdgeInsets.only(bottom: 4, left: 17),
                 child: Text(
                   "Username",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
                     color: HexColor('828282'),
                     fontSize: 15,
@@ -191,7 +194,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     fillColor: Colors.white,
                     enabledColor: HexColor('AEAEAE'),
                     prefixIconColor: HexColor('1C2D57'),
-                    hintStyle: GoogleFonts.poppins(
+                    hintStyle: TextStyle(
+                      fontFamily: 'Poppins',
                       color: HexColor('8189B0'),
                       fontSize: 18,
                     ),
@@ -222,7 +226,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding: const EdgeInsets.only(bottom: 4, left: 17),
                 child: Text(
                   "Password",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
                     color: HexColor('828282'),
                     fontSize: 15,
@@ -251,7 +256,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     fillColor: Colors.white,
                     prefixIconColor: HexColor('1C2D57'),
                     enabledColor: HexColor('AEAEAE'),
-                    hintStyle: GoogleFonts.poppins(
+                    hintStyle: TextStyle(
+                      fontFamily: 'Poppins',
                       color: HexColor('8189B0'),
                       fontSize: 18,
                     ),
@@ -301,7 +307,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     child: Text(
                       "Lupa password?",
-                      style: GoogleFonts.poppins(color: HexColor('828282')),
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: HexColor('828282'),
+                      ),
                     ),
                   ),
                 ],
@@ -334,7 +343,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                       child: Text(
                         textButton,
-                        style: GoogleFonts.poppins(
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
                           color: Color(0xffffffff),
                           fontWeight: FontWeight.w700,
                           fontSize: 16,

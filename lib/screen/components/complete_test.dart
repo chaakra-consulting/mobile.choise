@@ -35,7 +35,8 @@ class _CompleteTestState extends State<CompleteTest> {
         ),
         title: Text(
           widget.title,
-          style: GoogleFonts.poppins(
+          style: TextStyle(
+            fontFamily: 'Poppins',
             fontSize: 25,
             fontWeight: FontWeight.w500,
             color: HexColor("454545"),
@@ -49,7 +50,8 @@ class _CompleteTestState extends State<CompleteTest> {
           Text(
             "Berhasil",
             textAlign: TextAlign.center,
-            style: GoogleFonts.poppins(
+            style: TextStyle(
+              fontFamily: 'Poppins',
               color: HexColor('454545'),
               fontSize: 35,
               fontWeight: FontWeight.w900,
@@ -58,7 +60,8 @@ class _CompleteTestState extends State<CompleteTest> {
           Text(
             "Data berhasil dikirim",
             textAlign: TextAlign.center,
-            style: GoogleFonts.poppins(
+            style: TextStyle(
+              fontFamily: 'Poppins',
               color: HexColor('454545'),
               fontSize: 20,
               fontWeight: FontWeight.w400,
@@ -114,7 +117,8 @@ class _CompleteTestState extends State<CompleteTest> {
                   },
                   child: Text(
                     "Kembali ke Beranda",
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
                       color: HexColor('FBC02D'),
                       fontWeight: FontWeight.w700,
                       fontSize: 20,

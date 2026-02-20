@@ -64,7 +64,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   children: [
                     Text(
                       "Selamat Datang",
-                      style: GoogleFonts.poppins(
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -72,7 +73,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                     Text(
                       userName,
-                      style: GoogleFonts.poppins(
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -87,7 +89,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               padding: const EdgeInsets.only(left: 20.0),
               child: Text(
                 "Ujian Saya",
-                style: GoogleFonts.poppins(
+                style: TextStyle(
+                  fontFamily: 'Poppins',
                   fontSize: 35,
                   fontWeight: FontWeight.w300,
                   color: HexColor('454545'),
@@ -100,7 +103,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 Text(
                   "Tes Tulis dan Psikotes",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
                     color: HexColor('454545'),
@@ -108,7 +112,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 Text(
                   "Kerjakan Sesuai Dengan Waktu Yang Telah Ditentukan!",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     fontSize: 13,
                     fontWeight: FontWeight.w300,
                     color: HexColor('454545'),
@@ -162,7 +167,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         },
                         child: Text(
                           "Logout",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
                             color: Color(0xffffffff),
                             fontWeight: FontWeight.w700,
                             fontSize: 16,

@@ -22,7 +22,8 @@ class CarouselCard extends StatelessWidget {
           child: Center(
             child: Text(
               id,
-              style: GoogleFonts.poppins(
+              style: TextStyle(
+                fontFamily: 'Poppins',
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -45,7 +46,8 @@ class CarouselCard extends StatelessWidget {
         child: Center(
           child: Text(
             id,
-            style: GoogleFonts.poppins(
+            style: TextStyle(
+              fontFamily: 'Poppins',
               fontSize: 25,
               fontWeight: FontWeight.bold,
               color: HexColor('FBC02D'),

@@ -278,7 +278,8 @@ class _MSDTTestScreenState extends State<MSDTTestScreen> {
             },
             child: Text(
               "Kirim Jawaban",
-              style: GoogleFonts.poppins(
+              style: TextStyle(
+                fontFamily: 'Poppins',
                 color: Color(0xffffffff),
                 fontWeight: FontWeight.w700,
                 fontSize: 18,
@@ -308,7 +309,8 @@ class _MSDTTestScreenState extends State<MSDTTestScreen> {
             },
             child: Text(
               "Berikutnya",
-              style: GoogleFonts.poppins(
+              style: TextStyle(
+                fontFamily: 'Poppins',
                 color: Color(0xffffffff),
                 fontWeight: FontWeight.w700,
                 fontSize: 18,
@@ -340,7 +342,8 @@ class _MSDTTestScreenState extends State<MSDTTestScreen> {
                 },
                 child: Text(
                   "Sebelumnya",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Color(0xffffffff),
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
@@ -369,7 +372,8 @@ class _MSDTTestScreenState extends State<MSDTTestScreen> {
                 },
                 child: Text(
                   "Berikutnya",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Color(0xffffffff),
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
@@ -401,7 +405,8 @@ class _MSDTTestScreenState extends State<MSDTTestScreen> {
         ),
         title: Text(
           "Tes Tipe Kepemimpinan",
-          style: GoogleFonts.poppins(
+          style: TextStyle(
+            fontFamily: 'Poppins',
             fontSize: 25,
             fontWeight: FontWeight.w500,
             color: HexColor("454545"),
@@ -415,7 +420,8 @@ class _MSDTTestScreenState extends State<MSDTTestScreen> {
               redirectTo: () {
                 Get.to(() => CompleteTest(title: "Tes Tipe Kepemimpinan"));
               },
-              textStyle: GoogleFonts.poppins(
+              textStyle: TextStyle(
+                fontFamily: 'Poppins',
                 color: HexColor('828282'),
                 fontSize: 15,
               ),
@@ -453,7 +459,8 @@ class _MSDTTestScreenState extends State<MSDTTestScreen> {
                       backgroundColor: HexColor('FBC02D'),
                       title: Text(
                         "INSTRUKSI TES!",
-                        style: GoogleFonts.poppins(
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
                           color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -468,7 +475,8 @@ class _MSDTTestScreenState extends State<MSDTTestScreen> {
                             children: [
                               Text(
                                 "1. Dalam ujian ini terdapat 64 pasang pernyataan",
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -476,7 +484,8 @@ class _MSDTTestScreenState extends State<MSDTTestScreen> {
                               ),
                               Text(
                                 "2. Setiap nomor akan terdiri dari satu pasang pernyataan",
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -484,7 +493,8 @@ class _MSDTTestScreenState extends State<MSDTTestScreen> {
                               ),
                               Text(
                                 "3. Tugas anda memilih satu pernyataan yang paling sesuai / mencerminklan diri anda",
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -492,7 +502,8 @@ class _MSDTTestScreenState extends State<MSDTTestScreen> {
                               ),
                               Text(
                                 '4. Apabila pernyataan tersebut sama - sama mencerminkan diri anda / bahkan sebaliknya , maka anda tetap harus memilih 1 ( Satu ) pernyataan yang paling mendekati dari setiap pasang pernyataan.',
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -543,7 +554,8 @@ class _MSDTTestScreenState extends State<MSDTTestScreen> {
                     Text(
                       "Pertanyaan $nomorSoal",
                       // textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
                         color: HexColor('454545'),
                         fontSize: 27,
                         fontWeight: FontWeight.w900,
@@ -596,7 +608,8 @@ class _MSDTTestScreenState extends State<MSDTTestScreen> {
                                       choiceList.isEmpty
                                           ? " "
                                           : choiceList[index]['pernyataan'],
-                                      style: GoogleFonts.poppins(
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                         color:

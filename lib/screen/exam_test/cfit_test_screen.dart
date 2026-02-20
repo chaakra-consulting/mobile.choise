@@ -103,6 +103,7 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
       if (mounted) {
         if (response.statusCode == 200) {
           var data = jsonDecode(response.body)['data'] as List;
+          print(data);
           setState(() {
             answer.addAll(
               data.map((dynamic json) {
@@ -164,6 +165,7 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
           DateTime now = DateTime.now();
           var data = jsonDecode(response.body)['data'] as List;
           // print(DateTime.parse("2026-02-03T14:25:35+07:00").toLocal());
+          print(data);
           setState(() {
             questions.addAll(
               data.map((dynamic json) {
@@ -188,6 +190,7 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
           });
 
           isLoading = false;
+
           // print(getSorted(examData));
         } else {
           setState(() {
@@ -304,7 +307,8 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
             },
             child: Text(
               subtes == 4 ? "Kirim Jawaban" : "Lanjutkan Ujian",
-              style: GoogleFonts.poppins(
+              style: TextStyle(
+                fontFamily: 'Poppins',
                 color: Color(0xffffffff),
                 fontWeight: FontWeight.w700,
                 fontSize: 18,
@@ -334,7 +338,8 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
             },
             child: Text(
               "Berikutnya",
-              style: GoogleFonts.poppins(
+              style: TextStyle(
+                fontFamily: 'Poppins',
                 color: Color(0xffffffff),
                 fontWeight: FontWeight.w700,
                 fontSize: 18,
@@ -366,7 +371,8 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
                 },
                 child: Text(
                   "Sebelumnya",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Color(0xffffffff),
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
@@ -395,7 +401,8 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
                 },
                 child: Text(
                   "Berikutnya",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Color(0xffffffff),
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
@@ -427,7 +434,8 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
         ),
         title: Text(
           "Ujian CFIT Sub $subtes",
-          style: GoogleFonts.poppins(
+          style: TextStyle(
+            fontFamily: 'Poppins',
             fontSize: 25,
             fontWeight: FontWeight.w500,
             color: HexColor("454545"),
@@ -441,7 +449,8 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
               redirectTo: () {
                 Get.to(() => CfitSub2TestScreen(targetSubtes: 2));
               },
-              textStyle: GoogleFonts.poppins(
+              textStyle: TextStyle(
+                fontFamily: 'Poppins',
                 color: HexColor('828282'),
                 fontSize: 15,
               ),
@@ -465,41 +474,48 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
               Container(
                 width: width / 1.2,
                 height: height / 14,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: questions.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          nomorSoal = questions[index].nomorSoal!;
-                        });
-                        loadAnswer();
-                        setAnswer();
-                      },
-                      child: CarouselCard(
-                        id: questions[index].nomorSoal.toString(),
-                        isSelected:
-                            answer
-                                .where(
-                                  (element) =>
-                                      element.nomorSoal ==
-                                      questions[index].nomorSoal,
-                                )
-                                .isNotEmpty
-                            ? true
-                            : false,
+                child: isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: HexColor('FBC02D'),
+                        ),
+                      )
+                    : ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: questions.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                nomorSoal = questions[index].nomorSoal!;
+                              });
+                              loadAnswer();
+                              setAnswer();
+                            },
+                            child: CarouselCard(
+                              id: questions[index].nomorSoal.toString(),
+                              isSelected:
+                                  answer
+                                      .where(
+                                        (element) =>
+                                            element.nomorSoal ==
+                                            questions[index].nomorSoal,
+                                      )
+                                      .isNotEmpty
+                                  ? true
+                                  : false,
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
               ),
               SizedBox(height: height / 30),
 
               Text(
                 "Pertanyaan $nomorSoal",
                 // textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
+                style: TextStyle(
+                  fontFamily: 'Poppins',
                   color: HexColor('454545'),
                   fontSize: 27,
                   fontWeight: FontWeight.w900,

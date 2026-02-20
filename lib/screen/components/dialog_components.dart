@@ -15,7 +15,8 @@ void showErrorDialog(String title, String message, BuildContext context) {
             const SizedBox(width: 8),
             Text(
               title,
-              style: GoogleFonts.poppins(
+              style: TextStyle(
+                fontFamily: 'Poppins',
                 color: Color(0xFF1A1A1A),
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -25,7 +26,11 @@ void showErrorDialog(String title, String message, BuildContext context) {
         ),
         content: Text(
           message,
-          style: GoogleFonts.poppins(color: Color(0xFF666666), fontSize: 14),
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            color: Color(0xFF666666),
+            fontSize: 14,
+          ),
         ),
         actions: [
           TextButton(

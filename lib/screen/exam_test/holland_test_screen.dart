@@ -173,7 +173,8 @@ class _HollandTestScreenState extends State<HollandTestScreen> {
         ),
         title: Text(
           "Ujian Holland",
-          style: GoogleFonts.poppins(
+          style: TextStyle(
+            fontFamily: 'Poppins',
             fontSize: 25,
             fontWeight: FontWeight.w500,
             color: HexColor("454545"),
@@ -187,7 +188,8 @@ class _HollandTestScreenState extends State<HollandTestScreen> {
               redirectTo: () {
                 Get.to(() => CompleteTest(title: "Ujian Holland"));
               },
-              textStyle: GoogleFonts.poppins(
+              textStyle: TextStyle(
+                fontFamily: 'Poppins',
                 color: HexColor('828282'),
                 fontSize: 15,
               ),
@@ -223,7 +225,8 @@ class _HollandTestScreenState extends State<HollandTestScreen> {
                       backgroundColor: HexColor('FBC02D'),
                       title: Text(
                         "Petunjuk Pengisian",
-                        style: GoogleFonts.poppins(
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
                           color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -238,7 +241,8 @@ class _HollandTestScreenState extends State<HollandTestScreen> {
                             children: [
                               Text(
                                 "Pada kuesioner ini terdiri atas 6 tabel, masing-masing tabel terdiri atas 3 kolom kosong yang harus diisi oleh Bapak/Ibu sekalian dengan menggunakan tanda () pada pernyataan yang mencerminkan diri Bapak/Ibu sekalian pada beberapa pertanyaan yang telah disediakan. \nUntuk pemilihan masing-masing pernyataan sangat memungkinkan untuk memilih atau mencentang () lebih dari satu pernyataan pada masing-masing kolom. \nOleh karena itu, kami mengharapkan Bapak/Ibu mencermati dengan seksama setiap pernyataan yang ada, kemudian memilih satu atau lebih dari pernyataan pada masing-masing kolom yang tersedia pada tabel tersebut.",
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -255,7 +259,8 @@ class _HollandTestScreenState extends State<HollandTestScreen> {
                     Center(
                       child: Text(
                         "*Dimohon untuk me submit jawaban sebelum waktu ujian berakhir, agar jawaban dapat terekam !",
-                        style: GoogleFonts.poppins(
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                           color: HexColor("454545"),
@@ -267,7 +272,8 @@ class _HollandTestScreenState extends State<HollandTestScreen> {
                     Text(
                       "Realistis",
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
                         color: HexColor('454545'),
                         fontSize: 20,
                         fontWeight: FontWeight.w900,
@@ -373,7 +379,8 @@ class _HollandTestScreenState extends State<HollandTestScreen> {
                     Text(
                       "Investigatif",
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
                         color: HexColor('454545'),
                         fontSize: 20,
                         fontWeight: FontWeight.w900,
@@ -484,7 +491,8 @@ class _HollandTestScreenState extends State<HollandTestScreen> {
                     Text(
                       "Artistik",
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
                         color: HexColor('454545'),
                         fontSize: 20,
                         fontWeight: FontWeight.w900,
@@ -589,7 +597,8 @@ class _HollandTestScreenState extends State<HollandTestScreen> {
                     Text(
                       "Sosial",
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
                         color: HexColor('454545'),
                         fontSize: 20,
                         fontWeight: FontWeight.w900,
@@ -694,7 +703,8 @@ class _HollandTestScreenState extends State<HollandTestScreen> {
                     Text(
                       "Enterprising",
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
                         color: HexColor('454545'),
                         fontSize: 20,
                         fontWeight: FontWeight.w900,
@@ -809,7 +819,8 @@ class _HollandTestScreenState extends State<HollandTestScreen> {
                     Text(
                       "Konvensional",
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
                         color: HexColor('454545'),
                         fontSize: 20,
                         fontWeight: FontWeight.w900,
@@ -942,7 +953,8 @@ class _HollandTestScreenState extends State<HollandTestScreen> {
                           },
                           child: Text(
                             "Kirim Jawaban",
-                            style: GoogleFonts.poppins(
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
                               color: Color(0xffffffff),
                               fontWeight: FontWeight.w700,
                               fontSize: 18,

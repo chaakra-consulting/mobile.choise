@@ -139,7 +139,8 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
             },
             child: Text(
               "Kirim Jawaban",
-              style: GoogleFonts.poppins(
+              style: TextStyle(
+                fontFamily: 'Poppins',
                 color: Color(0xffffffff),
                 fontWeight: FontWeight.w700,
                 fontSize: 18,
@@ -169,7 +170,8 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
             },
             child: Text(
               "Berikutnya",
-              style: GoogleFonts.poppins(
+              style: TextStyle(
+                fontFamily: 'Poppins',
                 color: Color(0xffffffff),
                 fontWeight: FontWeight.w700,
                 fontSize: 18,
@@ -201,7 +203,8 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
                 },
                 child: Text(
                   "Sebelumnya",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Color(0xffffffff),
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
@@ -230,7 +233,8 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
                 },
                 child: Text(
                   "Berikutnya",
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
                     color: Color(0xffffffff),
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
@@ -436,7 +440,8 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
         ),
         title: Text(
           "Tes Tipe Kepribadian",
-          style: GoogleFonts.poppins(
+          style: TextStyle(
+            fontFamily: 'Poppins',
             fontSize: 25,
             fontWeight: FontWeight.w500,
             color: HexColor("454545"),
@@ -450,7 +455,8 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
               redirectTo: () {
                 Get.to(() => CompleteTest(title: "Tes Tipe Kepribadian"));
               },
-              textStyle: GoogleFonts.poppins(
+              textStyle: TextStyle(
+                fontFamily: 'Poppins',
                 color: HexColor('828282'),
                 fontSize: 15,
               ),
@@ -487,7 +493,8 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
                       backgroundColor: HexColor('FBC02D'),
                       title: Text(
                         "INSTRUKSI TES!",
-                        style: GoogleFonts.poppins(
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
                           color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -503,7 +510,8 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
                               SizedBox(height: 10),
                               Text(
                                 "1. Pilihlah 1 pernyataan yang PALING SESUAI dengan diri Anda SAAT INI ( M )",
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -511,7 +519,8 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
                               ),
                               Text(
                                 "2. Pilihlah 1 pernyataan yang PALING TIDAK SESUAI dengan Anda SAAT INI ( L )",
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -519,7 +528,8 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
                               ),
                               Text(
                                 "3. Dalam 1 nomor akan ada 2 jawaban (1 jawaban pernyataan M & 1 Jawaban pernyataan L)",
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -527,7 +537,8 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
                               ),
                               Text(
                                 "4. Dalam satu nomor soal, tidak boleh ada jawaban yang sama untuk masing-masing kolom M dan L",
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -575,7 +586,8 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
                     Text(
                       "Pertanyaan $nomorSoal",
                       // textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
                         color: HexColor('454545'),
                         fontSize: 27,
                         fontWeight: FontWeight.w900,
@@ -583,7 +595,8 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
                     ),
                     Text(
                       "*Pastikan Tidak Ada 2 Jawaban pada kolom ( M / L ) yang sama , 2 Jawaban diwajibkan pada kolom ( M / L ) yang berbeda",
-                      style: GoogleFonts.poppins(
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: HexColor("454545"),
@@ -599,7 +612,8 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
                               padding: EdgeInsets.all(8.0),
                               child: Text(
                                 'M',
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
                                   color: HexColor("454545"),
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -609,7 +623,8 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
                               padding: EdgeInsets.all(8.0),
                               child: Text(
                                 'L',
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
                                   color: HexColor("454545"),
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -619,7 +634,8 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
                               padding: EdgeInsets.all(8.0),
                               child: Text(
                                 'Pernyataan',
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
                                   color: HexColor("454545"),
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -665,7 +681,7 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
                                   pernyataanChoice.isNotEmpty
                                       ? pernyataanChoice[i]
                                       : "",
-                                  style: GoogleFonts.poppins(),
+                                  style: TextStyle(fontFamily: 'Poppins'),
                                 ),
                               ),
                             ],
