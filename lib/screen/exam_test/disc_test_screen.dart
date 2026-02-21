@@ -9,6 +9,7 @@ import 'package:mobile_choise/models/DISCQuestion.dart';
 import 'package:mobile_choise/screen/components/carousel_card.dart';
 import 'package:mobile_choise/screen/components/complete_test.dart';
 import 'package:mobile_choise/screen/components/dialog_components.dart';
+import 'package:mobile_choise/screen/exam_dashboard.dart';
 import 'package:mobile_choise/utils/base_url.dart';
 import 'package:mobile_choise/utils/hex_color.dart';
 import 'package:mobile_choise/widgets/clock_widget.dart';
@@ -422,279 +423,394 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
     }
   }
 
+  Future<bool> _showExitConfirmation(BuildContext context) async {
+    final textTheme = Theme.of(context).textTheme;
+    final result = await showDialog<bool>(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          title: Row(
+            children: [
+              Icon(
+                Icons.warning_amber_rounded,
+                color: Color(0xFFD69E2E),
+                size: 24,
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                'Peringatan',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          content: const Text(
+            'Jika kamu kembali atau tidak melanjutkan tes, semua data yang telah diisi akan dihapus dan tidak terkirim. Apakah kamu yakin ingin keluar dari tes?',
+            style: TextStyle(fontFamily: 'Poppins', fontSize: 14, height: 1.4),
+          ),
+          actionsOverflowButtonSpacing: 5,
+          actionsOverflowDirection: VerticalDirection.down,
+          actions: [
+            Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: HexColor('FBC02D')),
+                        ),
+                      ),
+                      child: Text(
+                        'Lanjutkan Tes',
+                        style: textTheme.labelMedium?.copyWith(
+                          fontFamily: 'Poppins',
+                          color: HexColor('FBC02D'),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: SizedBox(
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.off(() => ExamDashboard());
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red[700],
+                        foregroundColor: HexColor("FFFFFF"),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        'Keluar Tes',
+                        style: textTheme.labelMedium?.copyWith(
+                          fontFamily: 'Poppins',
+                          color: HexColor("FFFFFF"),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+    return result ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    return PopScope(
+      canPop: false, // Prevents automatic popping
+      onPopInvokedWithResult: (didPop, result) async {
+        // If the system already handled the pop, don't do anything
+        if (didPop) return;
+
+        // Show the dialog and wait for the user's choice
+        final shouldPop = await _showExitConfirmation(context);
+
+        // Crucial: Check if the widget is still "mounted" before using context
+        if (context.mounted && (shouldPop)) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
         backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {},
-          icon: Icon(
-            CupertinoIcons.left_chevron,
-            fontWeight: FontWeight.w700,
-            color: HexColor("454545"),
-          ),
-        ),
-        title: Text(
-          "Tes Tipe Kepribadian",
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 25,
-            fontWeight: FontWeight.w500,
-            color: HexColor("454545"),
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: ClockWidget(
-              timeSeconds: 1800,
-              redirectTo: () {
-                Get.to(() => CompleteTest(title: "Tes Tipe Kepribadian"));
-              },
-              textStyle: TextStyle(
-                fontFamily: 'Poppins',
-                color: HexColor('828282'),
-                fontSize: 15,
-              ),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            onPressed: () {},
+            icon: Icon(
+              CupertinoIcons.left_chevron,
+              fontWeight: FontWeight.w700,
+              color: HexColor("454545"),
             ),
           ),
-        ],
-      ),
-      body: RefreshIndicator(
-        color: HexColor('FBC02D'),
-        onRefresh: () async {
-          loadQuestion();
-          loadAnswer();
-        },
-        child: isLoading
-            ? Center(
-                child: CircularProgressIndicator(color: HexColor('FBC02D')),
-              )
-            : Padding(
-                padding: const EdgeInsets.only(left: 15, right: 15),
-                child: ListView(
-                  children: [
-                    SizedBox(height: 10),
-                    ExpansionTile(
-                      iconColor: Colors.white,
-                      collapsedIconColor: Colors.white,
-                      collapsedBackgroundColor: HexColor('FBC02D'),
-                      collapsedShape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      splashColor: HexColor('FBC02D'),
-                      backgroundColor: HexColor('FBC02D'),
-                      title: Text(
-                        "INSTRUKSI TES!",
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+          title: Text(
+            "Tes Tipe Kepribadian",
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 25,
+              fontWeight: FontWeight.w500,
+              color: HexColor("454545"),
+            ),
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: ClockWidget(
+                timeSeconds: 1800,
+                redirectTo: () {
+                  Get.to(() => CompleteTest(title: "Tes Tipe Kepribadian"));
+                },
+                textStyle: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: HexColor('828282'),
+                  fontSize: 15,
+                ),
+              ),
+            ),
+          ],
+        ),
+        body: RefreshIndicator(
+          color: HexColor('FBC02D'),
+          onRefresh: () async {
+            loadQuestion();
+            loadAnswer();
+          },
+          child: isLoading
+              ? Center(
+                  child: CircularProgressIndicator(color: HexColor('FBC02D')),
+                )
+              : Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 15),
+                  child: ListView(
+                    children: [
+                      SizedBox(height: 10),
+                      ExpansionTile(
+                        iconColor: Colors.white,
+                        collapsedIconColor: Colors.white,
+                        collapsedBackgroundColor: Colors.red[700],
+                        collapsedShape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                      ),
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: 10),
-                              Text(
-                                "1. Pilihlah 1 pernyataan yang PALING SESUAI dengan diri Anda SAAT INI ( M )",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                "2. Pilihlah 1 pernyataan yang PALING TIDAK SESUAI dengan Anda SAAT INI ( L )",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                "3. Dalam 1 nomor akan ada 2 jawaban (1 jawaban pernyataan M & 1 Jawaban pernyataan L)",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                "4. Dalam satu nomor soal, tidak boleh ada jawaban yang sama untuk masing-masing kolom M dan L",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              SizedBox(height: 25),
-                            ],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        splashColor: Colors.red[700],
+                        backgroundColor: Colors.red[700],
+                        title: Text(
+                          "INSTRUKSI TES!",
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ],
-                    ),
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 10),
+                                Text(
+                                  "1. Pilihlah 1 pernyataan yang PALING SESUAI dengan diri Anda SAAT INI ( M )",
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(
+                                  "2. Pilihlah 1 pernyataan yang PALING TIDAK SESUAI dengan Anda SAAT INI ( L )",
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(
+                                  "3. Dalam 1 nomor akan ada 2 jawaban (1 jawaban pernyataan M & 1 Jawaban pernyataan L)",
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(
+                                  "4. Dalam satu nomor soal, tidak boleh ada jawaban yang sama untuk masing-masing kolom M dan L",
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(height: 25),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
 
-                    SizedBox(height: 25),
-                    Container(
-                      width: width / 1.2,
-                      height: height / 14,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: questions.length,
-                        itemBuilder: (context, index) {
-                          var answer = answers.where(
-                            (element) =>
-                                element.noSoal == questions[index].noSoal,
-                          );
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                nomorSoal = questions[index].noSoal!;
-                                setAllChoice();
-                                loadAnswer();
-                                selectedLOption = null;
-                                selectedMOption = null;
-                              });
-                            },
-                            child: CarouselCard(
-                              id: questions[index].noSoal.toString(),
-                              isSelected: answer.isEmpty ? false : true,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 10),
-
-                    Text(
-                      "Pertanyaan $nomorSoal",
-                      // textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: HexColor('454545'),
-                        fontSize: 27,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    Text(
-                      "*Pastikan Tidak Ada 2 Jawaban pada kolom ( M / L ) yang sama , 2 Jawaban diwajibkan pada kolom ( M / L ) yang berbeda",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: HexColor("454545"),
-                      ),
-                    ),
-                    SizedBox(height: height / 20),
-                    Table(
-                      border: TableBorder.all(color: Colors.black, width: 1.0),
-                      children: [
-                        TableRow(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'M',
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: HexColor("454545"),
-                                  fontWeight: FontWeight.w600,
-                                ),
+                      SizedBox(height: 25),
+                      Container(
+                        width: width / 1.2,
+                        height: height / 14,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: questions.length,
+                          itemBuilder: (context, index) {
+                            var answer = answers.where(
+                              (element) =>
+                                  element.noSoal == questions[index].noSoal,
+                            );
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  nomorSoal = questions[index].noSoal!;
+                                  setAllChoice();
+                                  loadAnswer();
+                                  selectedLOption = null;
+                                  selectedMOption = null;
+                                });
+                              },
+                              child: CarouselCard(
+                                id: questions[index].noSoal.toString(),
+                                isSelected: answer.isEmpty ? false : true,
                               ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'L',
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: HexColor("454545"),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'Pernyataan',
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: HexColor("454545"),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ],
+                            );
+                          },
                         ),
-                        for (var i = 0; i < 4; i++)
+                      ),
+                      SizedBox(height: 10),
+
+                      Text(
+                        "Pertanyaan $nomorSoal",
+                        // textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: HexColor('454545'),
+                          fontSize: 27,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      Text(
+                        "*Pastikan Tidak Ada 2 Jawaban pada kolom ( M / L ) yang sama , 2 Jawaban diwajibkan pada kolom ( M / L ) yang berbeda",
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: HexColor("454545"),
+                        ),
+                      ),
+                      SizedBox(height: height / 20),
+                      Table(
+                        border: TableBorder.all(
+                          color: Colors.black,
+                          width: 1.0,
+                        ),
+                        children: [
                           TableRow(
                             children: [
                               Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Radio<String>(
-                                  activeColor: HexColor('FBC02D'),
-                                  value: mChoice.isNotEmpty ? mChoice[i] : "",
-                                  groupValue: selectedMOption,
-                                  onChanged: (String? value) {
-                                    setState(() {
-                                      selectedMOption = value;
-                                    });
-                                    print(selectedMOption);
-                                  },
+                                child: Text(
+                                  'M',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: HexColor("454545"),
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Radio<String>(
-                                  activeColor: HexColor('FBC02D'),
-                                  value: lChoice.isNotEmpty ? lChoice[i] : "",
-                                  groupValue: selectedLOption,
-                                  onChanged: (String? value) {
-                                    setState(() {
-                                      selectedLOption = value;
-                                    });
-                                    print(selectedLOption);
-                                  },
-                                ),
-                              ),
-
                               Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Text(
-                                  pernyataanChoice.isNotEmpty
-                                      ? pernyataanChoice[i]
-                                      : "",
-                                  style: TextStyle(fontFamily: 'Poppins'),
+                                  'L',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: HexColor("454545"),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Pernyataan',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: HexColor("454545"),
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                      ],
-                    ),
-                    SizedBox(height: height / 10),
+                          for (var i = 0; i < 4; i++)
+                            TableRow(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Radio<String>(
+                                    activeColor: HexColor('FBC02D'),
+                                    value: mChoice.isNotEmpty ? mChoice[i] : "",
+                                    groupValue: selectedMOption,
+                                    onChanged: (String? value) {
+                                      setState(() {
+                                        selectedMOption = value;
+                                      });
+                                      print(selectedMOption);
+                                    },
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Radio<String>(
+                                    activeColor: HexColor('FBC02D'),
+                                    value: lChoice.isNotEmpty ? lChoice[i] : "",
+                                    groupValue: selectedLOption,
+                                    onChanged: (String? value) {
+                                      setState(() {
+                                        selectedLOption = value;
+                                      });
+                                      print(selectedLOption);
+                                    },
+                                  ),
+                                ),
 
-                    bottomBtn(width, height),
-                    SizedBox(height: height / 20),
-                  ],
+                                Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    pernyataanChoice.isNotEmpty
+                                        ? pernyataanChoice[i]
+                                        : "",
+                                    style: TextStyle(fontFamily: 'Poppins'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                        ],
+                      ),
+                      SizedBox(height: height / 10),
+
+                      bottomBtn(width, height),
+                      SizedBox(height: height / 20),
+                    ],
+                  ),
                 ),
-              ),
+        ),
       ),
     );
   }

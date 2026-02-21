@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile_choise/models/ExamList.dart';
 import 'package:mobile_choise/utils/hex_color.dart';
 import 'package:mobile_choise/utils/redirect_screen.dart';
 
 class ExamCard extends StatelessWidget {
   Function? onClick;
+  ExamList? examList;
   String title;
   DateTime waktuMulai;
   DateTime waktuAkhir;

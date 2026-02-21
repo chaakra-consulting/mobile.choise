@@ -9,6 +9,7 @@ import 'package:mobile_choise/models/MSDTAnswer.dart';
 import 'package:mobile_choise/models/MSDTQuestion.dart';
 import 'package:mobile_choise/screen/components/carousel_card.dart';
 import 'package:mobile_choise/screen/components/dialog_components.dart';
+import 'package:mobile_choise/screen/exam_dashboard.dart';
 import 'package:mobile_choise/utils/base_url.dart';
 import 'package:mobile_choise/utils/hex_color.dart';
 import 'package:mobile_choise/widgets/clock_widget.dart';
@@ -387,236 +388,348 @@ class _MSDTTestScreenState extends State<MSDTTestScreen> {
     }
   }
 
+  Future<bool> _showExitConfirmation(BuildContext context) async {
+    final textTheme = Theme.of(context).textTheme;
+    final result = await showDialog<bool>(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          title: Row(
+            children: [
+              Icon(
+                Icons.warning_amber_rounded,
+                color: Color(0xFFD69E2E),
+                size: 24,
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                'Peringatan',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          content: const Text(
+            'Jika kamu kembali atau tidak melanjutkan tes, semua data yang telah diisi akan dihapus dan tidak terkirim. Apakah kamu yakin ingin keluar dari tes?',
+            style: TextStyle(fontFamily: 'Poppins', fontSize: 14, height: 1.4),
+          ),
+          actionsOverflowButtonSpacing: 5,
+          actionsOverflowDirection: VerticalDirection.down,
+          actions: [
+            Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: HexColor('FBC02D')),
+                        ),
+                      ),
+                      child: Text(
+                        'Lanjutkan Tes',
+                        style: textTheme.labelMedium?.copyWith(
+                          fontFamily: 'Poppins',
+                          color: HexColor('FBC02D'),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: SizedBox(
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.off(() => ExamDashboard());
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red[700],
+                        foregroundColor: HexColor("FFFFFF"),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        'Keluar Tes',
+                        style: textTheme.labelMedium?.copyWith(
+                          fontFamily: 'Poppins',
+                          color: HexColor("FFFFFF"),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+    return result ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    return PopScope(
+      canPop: false, // Prevents automatic popping
+      onPopInvokedWithResult: (didPop, result) async {
+        // If the system already handled the pop, don't do anything
+        if (didPop) return;
+
+        // Show the dialog and wait for the user's choice
+        final shouldPop = await _showExitConfirmation(context);
+
+        // Crucial: Check if the widget is still "mounted" before using context
+        if (context.mounted && (shouldPop)) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
         backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {},
-          icon: Icon(
-            CupertinoIcons.left_chevron,
-            fontWeight: FontWeight.w700,
-            color: HexColor("454545"),
-          ),
-        ),
-        title: Text(
-          "Tes Tipe Kepemimpinan",
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 25,
-            fontWeight: FontWeight.w500,
-            color: HexColor("454545"),
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: ClockWidget(
-              timeSeconds: 3600,
-              redirectTo: () {
-                Get.to(() => CompleteTest(title: "Tes Tipe Kepemimpinan"));
-              },
-              textStyle: TextStyle(
-                fontFamily: 'Poppins',
-                color: HexColor('828282'),
-                fontSize: 15,
-              ),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            onPressed: () {},
+            icon: Icon(
+              CupertinoIcons.left_chevron,
+              fontWeight: FontWeight.w700,
+              color: HexColor("454545"),
             ),
           ),
-        ],
-      ),
-      body: RefreshIndicator(
-        color: HexColor('FBC02D'),
-        onRefresh: () async {
-          loadQuestion();
-          setChoiceList();
-          loadAnswer();
-        },
-        child: isLoading
-            ? Center(
-                child: CircularProgressIndicator(color: HexColor('FBC02D')),
-              )
-            : Padding(
-                padding: const EdgeInsets.only(left: 15, right: 15),
-                child: ListView(
-                  children: [
-                    SizedBox(height: 10),
-                    ExpansionTile(
-                      iconColor: Colors.white,
-                      collapsedIconColor: Colors.white,
-                      collapsedBackgroundColor: HexColor('FBC02D'),
-                      collapsedShape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      splashColor: HexColor('FBC02D'),
-                      backgroundColor: HexColor('FBC02D'),
-                      title: Text(
-                        "INSTRUKSI TES!",
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+          title: Text(
+            "Tes Tipe Kepemimpinan",
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 25,
+              fontWeight: FontWeight.w500,
+              color: HexColor("454545"),
+            ),
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: ClockWidget(
+                timeSeconds: 3600,
+                redirectTo: () {
+                  Get.to(() => CompleteTest(title: "Tes Tipe Kepemimpinan"));
+                },
+                textStyle: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: HexColor('828282'),
+                  fontSize: 15,
+                ),
+              ),
+            ),
+          ],
+        ),
+        body: RefreshIndicator(
+          color: HexColor('FBC02D'),
+          onRefresh: () async {
+            loadQuestion();
+            setChoiceList();
+            loadAnswer();
+          },
+          child: isLoading
+              ? Center(
+                  child: CircularProgressIndicator(color: HexColor('FBC02D')),
+                )
+              : Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 15),
+                  child: ListView(
+                    children: [
+                      SizedBox(height: 10),
+                      ExpansionTile(
+                        iconColor: Colors.white,
+                        collapsedIconColor: Colors.white,
+                        collapsedBackgroundColor: Colors.red[700],
+                        collapsedShape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                      ),
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "1. Dalam ujian ini terdapat 64 pasang pernyataan",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                "2. Setiap nomor akan terdiri dari satu pasang pernyataan",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                "3. Tugas anda memilih satu pernyataan yang paling sesuai / mencerminklan diri anda",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                '4. Apabila pernyataan tersebut sama - sama mencerminkan diri anda / bahkan sebaliknya , maka anda tetap harus memilih 1 ( Satu ) pernyataan yang paling mendekati dari setiap pasang pernyataan.',
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              SizedBox(height: 25),
-                            ],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        splashColor: Colors.red[700],
+                        backgroundColor: Colors.red[700],
+                        title: Text(
+                          "INSTRUKSI TES!",
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ],
-                    ),
-
-                    SizedBox(height: 15),
-
-                    Container(
-                      width: width / 1.2,
-                      height: height / 14,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: questions.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                nomorSoal = questions[index].noSoal!;
-                                setChoiceList();
-                                loadAnswer();
-                                selectedChoice = {};
-                              });
-                            },
-                            child: CarouselCard(
-                              id: questions[index].noSoal.toString(),
-                              isSelected:
-                                  answers
-                                      .where(
-                                        (element) =>
-                                            element.noSoal ==
-                                            questions[index].noSoal,
-                                      )
-                                      .isEmpty
-                                  ? false
-                                  : true,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "1. Dalam ujian ini terdapat 64 pasang pernyataan",
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(
+                                  "2. Setiap nomor akan terdiri dari satu pasang pernyataan",
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(
+                                  "3. Tugas anda memilih satu pernyataan yang paling sesuai / mencerminklan diri anda",
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(
+                                  '4. Apabila pernyataan tersebut sama - sama mencerminkan diri anda / bahkan sebaliknya , maka anda tetap harus memilih 1 ( Satu ) pernyataan yang paling mendekati dari setiap pasang pernyataan.',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(height: 25),
+                              ],
                             ),
-                          );
-                        },
+                          ),
+                        ],
                       ),
-                    ),
-                    Text(
-                      "Pertanyaan $nomorSoal",
-                      // textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: HexColor('454545'),
-                        fontSize: 27,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    SizedBox(height: height / 30),
-                    DottedBorder(
-                      options: RoundedRectDottedBorderOptions(
-                        strokeCap: StrokeCap.round,
-                        color: HexColor('FBC02D'),
-                        dashPattern: [10, 5],
-                        strokeWidth: 2,
-                        padding: EdgeInsets.all(16),
-                        radius: Radius.circular(16),
-                      ),
-                      child: Container(
-                        height: height / 2.5,
-                        width: width,
-                        child: ListView(
-                          physics: NeverScrollableScrollPhysics(),
-                          children: List.generate(
-                            2,
-                            (index) => GestureDetector(
+
+                      SizedBox(height: 15),
+
+                      Container(
+                        width: width / 1.2,
+                        height: height / 14,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: questions.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
                               onTap: () {
                                 setState(() {
-                                  selectedChoice = choiceList[index];
+                                  nomorSoal = questions[index].noSoal!;
+                                  setChoiceList();
+                                  loadAnswer();
+                                  selectedChoice = {};
                                 });
                               },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: HexColor("FBC02D"),
-                                      width: 2,
+                              child: CarouselCard(
+                                id: questions[index].noSoal.toString(),
+                                isSelected:
+                                    answers
+                                        .where(
+                                          (element) =>
+                                              element.noSoal ==
+                                              questions[index].noSoal,
+                                        )
+                                        .isEmpty
+                                    ? false
+                                    : true,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      Text(
+                        "Pertanyaan $nomorSoal",
+                        // textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: HexColor('454545'),
+                          fontSize: 27,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      SizedBox(height: height / 30),
+                      DottedBorder(
+                        options: RoundedRectDottedBorderOptions(
+                          strokeCap: StrokeCap.round,
+                          color: HexColor('FBC02D'),
+                          dashPattern: [10, 5],
+                          strokeWidth: 2,
+                          padding: EdgeInsets.all(16),
+                          radius: Radius.circular(16),
+                        ),
+                        child: Container(
+                          height: height / 2.5,
+                          width: width,
+                          child: ListView(
+                            physics: NeverScrollableScrollPhysics(),
+                            children: List.generate(
+                              2,
+                              (index) => GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedChoice = choiceList[index];
+                                  });
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: HexColor("FBC02D"),
+                                        width: 2,
+                                      ),
+                                      color:
+                                          choiceList[index]['aspek'] ==
+                                              selectedChoice['aspek']
+                                          ? HexColor("FBC02D")
+                                          : Colors.white,
+                                      borderRadius: BorderRadius.circular(14),
                                     ),
-                                    color:
-                                        choiceList[index]['aspek'] ==
-                                            selectedChoice['aspek']
-                                        ? HexColor("FBC02D")
-                                        : Colors.white,
-                                    borderRadius: BorderRadius.circular(14),
-                                  ),
 
-                                  height: height / 5.5,
-                                  width: 100,
-                                  child: Padding(
-                                    padding: EdgeInsets.all(15),
-                                    child: Text(
-                                      choiceList.isEmpty
-                                          ? " "
-                                          : choiceList[index]['pernyataan'],
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color:
-                                            choiceList[index]['aspek'] ==
-                                                selectedChoice['aspek']
-                                            ? Colors.white
-                                            : HexColor("FBC02D"),
+                                    height: height / 5.5,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(15),
+                                      child: Text(
+                                        choiceList.isEmpty
+                                            ? " "
+                                            : choiceList[index]['pernyataan'],
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              choiceList[index]['aspek'] ==
+                                                  selectedChoice['aspek']
+                                              ? Colors.white
+                                              : HexColor("FBC02D"),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -626,12 +739,12 @@ class _MSDTTestScreenState extends State<MSDTTestScreen> {
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: height / 10),
-                    bottomBtn(width, height),
-                  ],
+                      SizedBox(height: height / 10),
+                      bottomBtn(width, height),
+                    ],
+                  ),
                 ),
-              ),
+        ),
       ),
     );
   }

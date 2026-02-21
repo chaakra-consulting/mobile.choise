@@ -31,7 +31,6 @@ class ExamDashboard extends StatefulWidget {
 }
 
 class _ExamDashboardState extends State<ExamDashboard> {
-  late Timer timer;
   bool isLoading = false;
   bool isTzNotMatch = false;
   List<ExamList> examList = [];
@@ -46,12 +45,6 @@ class _ExamDashboardState extends State<ExamDashboard> {
     //   const Duration(minutes: 1), // or seconds: 60
     //   (Timer t) => loadSchedule(),
     // );
-  }
-
-  @override
-  void dispose() {
-    timer.cancel(); // Cancel the timer when the widget is removed
-    super.dispose();
   }
 
   List<ExamList> getSorted(List<ExamList> allExams) {

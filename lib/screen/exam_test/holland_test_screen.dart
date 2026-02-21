@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_choise/models/HollandQuestion.dart';
 import 'package:mobile_choise/screen/components/complete_test.dart';
 import 'package:mobile_choise/screen/components/dialog_components.dart';
+import 'package:mobile_choise/screen/exam_dashboard.dart';
 import 'package:mobile_choise/utils/base_url.dart';
 import 'package:mobile_choise/utils/hex_color.dart';
 import 'package:http/http.dart' as http;
@@ -155,817 +156,958 @@ class _HollandTestScreenState extends State<HollandTestScreen> {
     }
   }
 
+  Future<bool> _showExitConfirmation(BuildContext context) async {
+    final textTheme = Theme.of(context).textTheme;
+    final result = await showDialog<bool>(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          title: Row(
+            children: [
+              Icon(
+                Icons.warning_amber_rounded,
+                color: Color(0xFFD69E2E),
+                size: 24,
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                'Peringatan',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          content: const Text(
+            'Jika kamu kembali atau tidak melanjutkan tes, semua data yang telah diisi akan dihapus dan tidak terkirim. Apakah kamu yakin ingin keluar dari tes?',
+            style: TextStyle(fontFamily: 'Poppins', fontSize: 14, height: 1.4),
+          ),
+          actionsOverflowButtonSpacing: 5,
+          actionsOverflowDirection: VerticalDirection.down,
+          actions: [
+            Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: HexColor('FBC02D')),
+                        ),
+                      ),
+                      child: Text(
+                        'Lanjutkan Tes',
+                        style: textTheme.labelMedium?.copyWith(
+                          fontFamily: 'Poppins',
+                          color: HexColor('FBC02D'),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: SizedBox(
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.off(() => ExamDashboard());
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red[700],
+                        foregroundColor: HexColor("FFFFFF"),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        'Keluar Tes',
+                        style: textTheme.labelMedium?.copyWith(
+                          fontFamily: 'Poppins',
+                          color: HexColor("FFFFFF"),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+    return result ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    return PopScope(
+      canPop: false, // Prevents automatic popping
+      onPopInvokedWithResult: (didPop, result) async {
+        // If the system already handled the pop, don't do anything
+        if (didPop) return;
+
+        // Show the dialog and wait for the user's choice
+        final shouldPop = await _showExitConfirmation(context);
+
+        // Crucial: Check if the widget is still "mounted" before using context
+        if (context.mounted && (shouldPop)) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
         backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {},
-          icon: Icon(
-            CupertinoIcons.left_chevron,
-            fontWeight: FontWeight.w700,
-            color: HexColor("454545"),
-          ),
-        ),
-        title: Text(
-          "Ujian Holland",
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 25,
-            fontWeight: FontWeight.w500,
-            color: HexColor("454545"),
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: ClockWidget(
-              timeSeconds: 1200,
-              redirectTo: () {
-                Get.to(() => CompleteTest(title: "Ujian Holland"));
-              },
-              textStyle: TextStyle(
-                fontFamily: 'Poppins',
-                color: HexColor('828282'),
-                fontSize: 15,
-              ),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            onPressed: () {},
+            icon: Icon(
+              CupertinoIcons.left_chevron,
+              fontWeight: FontWeight.w700,
+              color: HexColor("454545"),
             ),
           ),
-        ],
-      ),
-      body: RefreshIndicator(
-        color: HexColor('FBC02D'),
-        onRefresh: () async {
-          loadQuestion();
-        },
-        child: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15),
-          child: isLoading
-              ? Center(
-                  child: CircularProgressIndicator(color: HexColor('FBC02D')),
-                )
-              : ListView(
-                  children: [
-                    SizedBox(height: 10),
-                    ExpansionTile(
-                      iconColor: Colors.white,
-                      collapsedIconColor: Colors.white,
-                      collapsedBackgroundColor: HexColor('FBC02D'),
-                      collapsedShape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      splashColor: HexColor('FBC02D'),
-                      backgroundColor: HexColor('FBC02D'),
-                      title: Text(
-                        "Petunjuk Pengisian",
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Pada kuesioner ini terdiri atas 6 tabel, masing-masing tabel terdiri atas 3 kolom kosong yang harus diisi oleh Bapak/Ibu sekalian dengan menggunakan tanda () pada pernyataan yang mencerminkan diri Bapak/Ibu sekalian pada beberapa pertanyaan yang telah disediakan. \nUntuk pemilihan masing-masing pernyataan sangat memungkinkan untuk memilih atau mencentang () lebih dari satu pernyataan pada masing-masing kolom. \nOleh karena itu, kami mengharapkan Bapak/Ibu mencermati dengan seksama setiap pernyataan yang ada, kemudian memilih satu atau lebih dari pernyataan pada masing-masing kolom yang tersedia pada tabel tersebut.",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-
-                              SizedBox(height: 25),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Center(
-                      child: Text(
-                        "*Dimohon untuk me submit jawaban sebelum waktu ujian berakhir, agar jawaban dapat terekam !",
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: HexColor("454545"),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 25),
-
-                    Text(
-                      "Realistis",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: HexColor('454545'),
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        dataRowMaxHeight: 80,
-                        // Step 2: Define your 3 headers
-                        columns: const <DataColumn>[
-                          DataColumn(
-                            label: Text(
-                              "Saya adalah seorang yang :",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              "Saya mampu :",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              "Saya menyukai :",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                        // Step 3: Add your data rows
-                        rows: List<DataRow>.generate(5, (index) {
-                          var realisticIAs = questions
-                              .where((element) => element.type == "Realistic")
-                              .where((element) => element.identifier == "i_as")
-                              .elementAt(index);
-                          var realisticCan = questions
-                              .where((element) => element.type == "Realistic")
-                              .where((element) => element.identifier == "i_can")
-                              .elementAt(index);
-                          var realisticLike = questions
-                              .where((element) => element.type == "Realistic")
-                              .where(
-                                (element) => element.identifier == "i_like",
-                              )
-                              .elementAt(index);
-                          return DataRow(
-                            cells: <DataCell>[
-                              DataCell(
-                                CheckboxListTile(
-                                  activeColor: HexColor('FBC02D'),
-                                  controlAffinity:
-                                      ListTileControlAffinity.leading,
-                                  value: realisticIAs.isChecked!,
-                                  onChanged: (val) {
-                                    setState(() {
-                                      realisticIAs.isChecked = val!;
-                                    });
-                                  },
-                                  title: Text(realisticIAs.questionText!),
-                                ),
-                              ),
-                              DataCell(
-                                CheckboxListTile(
-                                  activeColor: HexColor('FBC02D'),
-                                  controlAffinity:
-                                      ListTileControlAffinity.leading,
-                                  value: realisticCan.isChecked!,
-                                  onChanged: (val) {
-                                    setState(() {
-                                      realisticCan.isChecked = val!;
-                                    });
-                                  },
-                                  title: Text(realisticCan.questionText!),
-                                ),
-                              ),
-                              DataCell(
-                                realisticLike.questionText == "-"
-                                    ? Text("-")
-                                    : CheckboxListTile(
-                                        activeColor: HexColor('FBC02D'),
-                                        controlAffinity:
-                                            ListTileControlAffinity.leading,
-                                        value: realisticLike.isChecked!,
-                                        onChanged: (val) {
-                                          setState(() {
-                                            realisticLike.isChecked = val!;
-                                          });
-                                        },
-                                        title: Text(
-                                          realisticLike.questionText!,
-                                        ),
-                                      ),
-                              ),
-                            ],
-                          );
-                        }),
-                      ),
-                    ),
-
-                    SizedBox(height: 25),
-
-                    Text(
-                      "Investigatif",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: HexColor('454545'),
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        dataRowMaxHeight: 80,
-                        // Step 2: Define your 3 headers
-                        columns: const <DataColumn>[
-                          DataColumn(
-                            label: Text(
-                              "Saya adalah seorang yang :",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              "Saya mampu :",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              "Saya menyukai :",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                        // Step 3: Add your data rows
-                        rows: List<DataRow>.generate(7, (index) {
-                          var investigativeIAs = questions
-                              .where(
-                                (element) => element.type == "Investigative",
-                              )
-                              .where((element) => element.identifier == "i_as")
-                              .elementAt(index);
-                          var investigativeCan = questions
-                              .where(
-                                (element) => element.type == "Investigative",
-                              )
-                              .where((element) => element.identifier == "i_can")
-                              .elementAt(index);
-                          var investigativeLike = questions
-                              .where(
-                                (element) => element.type == "Investigative",
-                              )
-                              .where(
-                                (element) => element.identifier == "i_like",
-                              )
-                              .elementAt(index);
-                          return DataRow(
-                            cells: <DataCell>[
-                              DataCell(
-                                CheckboxListTile(
-                                  activeColor: HexColor('FBC02D'),
-                                  controlAffinity:
-                                      ListTileControlAffinity.leading,
-                                  value: investigativeIAs.isChecked!,
-                                  onChanged: (val) {
-                                    setState(() {
-                                      investigativeIAs.isChecked = val!;
-                                    });
-                                  },
-                                  title: Text(investigativeIAs.questionText!),
-                                ),
-                              ),
-                              DataCell(
-                                CheckboxListTile(
-                                  activeColor: HexColor('FBC02D'),
-                                  controlAffinity:
-                                      ListTileControlAffinity.leading,
-                                  value: investigativeCan.isChecked!,
-                                  onChanged: (val) {
-                                    setState(() {
-                                      investigativeCan.isChecked = val!;
-                                    });
-                                  },
-                                  title: Text(investigativeCan.questionText!),
-                                ),
-                              ),
-                              DataCell(
-                                investigativeLike.questionText == "-"
-                                    ? Text("-")
-                                    : CheckboxListTile(
-                                        activeColor: HexColor('FBC02D'),
-                                        controlAffinity:
-                                            ListTileControlAffinity.leading,
-                                        value: investigativeLike.isChecked!,
-                                        onChanged: (val) {
-                                          setState(() {
-                                            investigativeLike.isChecked = val!;
-                                          });
-                                        },
-                                        title: Text(
-                                          investigativeLike.questionText!,
-                                        ),
-                                      ),
-                              ),
-                            ],
-                          );
-                        }),
-                      ),
-                    ),
-
-                    SizedBox(height: 25),
-                    Text(
-                      "Artistik",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: HexColor('454545'),
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        dataRowMaxHeight: 80,
-                        // Step 2: Define your 3 headers
-                        columns: const <DataColumn>[
-                          DataColumn(
-                            label: Text(
-                              "Saya adalah seorang yang :",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              "Saya mampu :",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              "Saya menyukai :",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                        // Step 3: Add your data rows
-                        rows: List<DataRow>.generate(5, (index) {
-                          var artisticIAs = questions
-                              .where((element) => element.type == "Artistic")
-                              .where((element) => element.identifier == "i_as")
-                              .elementAt(index);
-                          var artisticCan = questions
-                              .where((element) => element.type == "Artistic")
-                              .where((element) => element.identifier == "i_can")
-                              .elementAt(index);
-                          var artisticLike = questions
-                              .where((element) => element.type == "Artistic")
-                              .where(
-                                (element) => element.identifier == "i_like",
-                              )
-                              .elementAt(index);
-                          return DataRow(
-                            cells: <DataCell>[
-                              DataCell(
-                                CheckboxListTile(
-                                  activeColor: HexColor('FBC02D'),
-                                  controlAffinity:
-                                      ListTileControlAffinity.leading,
-                                  value: artisticIAs.isChecked!,
-                                  onChanged: (val) {
-                                    setState(() {
-                                      artisticIAs.isChecked = val!;
-                                    });
-                                  },
-                                  title: Text(artisticIAs.questionText!),
-                                ),
-                              ),
-                              DataCell(
-                                artisticCan.questionText == "-"
-                                    ? Text("-")
-                                    : CheckboxListTile(
-                                        activeColor: HexColor('FBC02D'),
-                                        controlAffinity:
-                                            ListTileControlAffinity.leading,
-                                        value: artisticCan.isChecked!,
-                                        onChanged: (val) {
-                                          setState(() {
-                                            artisticCan.isChecked = val!;
-                                          });
-                                        },
-                                        title: Text(artisticCan.questionText!),
-                                      ),
-                              ),
-                              DataCell(
-                                artisticLike.questionText == "-"
-                                    ? Text("-")
-                                    : CheckboxListTile(
-                                        activeColor: HexColor('FBC02D'),
-                                        controlAffinity:
-                                            ListTileControlAffinity.leading,
-                                        value: artisticLike.isChecked!,
-                                        onChanged: (val) {
-                                          setState(() {
-                                            artisticLike.isChecked = val!;
-                                          });
-                                        },
-                                        title: Text(artisticLike.questionText!),
-                                      ),
-                              ),
-                            ],
-                          );
-                        }),
-                      ),
-                    ),
-
-                    SizedBox(height: 25),
-                    Text(
-                      "Sosial",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: HexColor('454545'),
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        dataRowMaxHeight: 80,
-                        // Step 2: Define your 3 headers
-                        columns: const <DataColumn>[
-                          DataColumn(
-                            label: Text(
-                              "Saya adalah seorang yang :",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              "Saya mampu :",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              "Saya menyukai :",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                        // Step 3: Add your data rows
-                        rows: List<DataRow>.generate(6, (index) {
-                          var socialIAs = questions
-                              .where((element) => element.type == "Social")
-                              .where((element) => element.identifier == "i_as")
-                              .elementAt(index);
-                          var socialCan = questions
-                              .where((element) => element.type == "Social")
-                              .where((element) => element.identifier == "i_can")
-                              .elementAt(index);
-                          var socialLike = questions
-                              .where((element) => element.type == "Social")
-                              .where(
-                                (element) => element.identifier == "i_like",
-                              )
-                              .elementAt(index);
-                          return DataRow(
-                            cells: <DataCell>[
-                              DataCell(
-                                CheckboxListTile(
-                                  activeColor: HexColor('FBC02D'),
-                                  controlAffinity:
-                                      ListTileControlAffinity.leading,
-                                  value: socialIAs.isChecked!,
-                                  onChanged: (val) {
-                                    setState(() {
-                                      socialIAs.isChecked = val!;
-                                    });
-                                  },
-                                  title: Text(socialIAs.questionText!),
-                                ),
-                              ),
-                              DataCell(
-                                socialCan.questionText == "-"
-                                    ? Text("-")
-                                    : CheckboxListTile(
-                                        activeColor: HexColor('FBC02D'),
-                                        controlAffinity:
-                                            ListTileControlAffinity.leading,
-                                        value: socialCan.isChecked!,
-                                        onChanged: (val) {
-                                          setState(() {
-                                            socialCan.isChecked = val!;
-                                          });
-                                        },
-                                        title: Text(socialCan.questionText!),
-                                      ),
-                              ),
-                              DataCell(
-                                socialLike.questionText == "-"
-                                    ? Text("-")
-                                    : CheckboxListTile(
-                                        activeColor: HexColor('FBC02D'),
-                                        controlAffinity:
-                                            ListTileControlAffinity.leading,
-                                        value: socialLike.isChecked!,
-                                        onChanged: (val) {
-                                          setState(() {
-                                            socialLike.isChecked = val!;
-                                          });
-                                        },
-                                        title: Text(socialLike.questionText!),
-                                      ),
-                              ),
-                            ],
-                          );
-                        }),
-                      ),
-                    ),
-
-                    SizedBox(height: 25),
-                    Text(
-                      "Enterprising",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: HexColor('454545'),
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        dataRowMaxHeight: 80,
-                        // Step 2: Define your 3 headers
-                        columns: const <DataColumn>[
-                          DataColumn(
-                            label: Text(
-                              "Saya adalah seorang yang :",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              "Saya mampu :",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              "Saya menyukai :",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                        // Step 3: Add your data rows
-                        rows: List<DataRow>.generate(6, (index) {
-                          var enterprisingIAs = questions
-                              .where(
-                                (element) => element.type == "Enterprising",
-                              )
-                              .where((element) => element.identifier == "i_as")
-                              .elementAt(index);
-                          var enterprisingCan = questions
-                              .where(
-                                (element) => element.type == "Enterprising",
-                              )
-                              .where((element) => element.identifier == "i_can")
-                              .elementAt(index);
-                          var enterprisingLike = questions
-                              .where(
-                                (element) => element.type == "Enterprising",
-                              )
-                              .where(
-                                (element) => element.identifier == "i_like",
-                              )
-                              .elementAt(index);
-                          return DataRow(
-                            cells: <DataCell>[
-                              DataCell(
-                                CheckboxListTile(
-                                  activeColor: HexColor('FBC02D'),
-                                  controlAffinity:
-                                      ListTileControlAffinity.leading,
-                                  value: enterprisingIAs.isChecked!,
-                                  onChanged: (val) {
-                                    setState(() {
-                                      enterprisingIAs.isChecked = val!;
-                                    });
-                                  },
-                                  title: Text(enterprisingIAs.questionText!),
-                                ),
-                              ),
-                              DataCell(
-                                enterprisingCan.questionText == "-"
-                                    ? Text("-")
-                                    : CheckboxListTile(
-                                        activeColor: HexColor('FBC02D'),
-                                        controlAffinity:
-                                            ListTileControlAffinity.leading,
-                                        value: enterprisingCan.isChecked!,
-                                        onChanged: (val) {
-                                          setState(() {
-                                            enterprisingCan.isChecked = val!;
-                                          });
-                                        },
-                                        title: Text(
-                                          enterprisingCan.questionText!,
-                                        ),
-                                      ),
-                              ),
-                              DataCell(
-                                enterprisingLike.questionText == "-"
-                                    ? Text("-")
-                                    : CheckboxListTile(
-                                        activeColor: HexColor('FBC02D'),
-                                        controlAffinity:
-                                            ListTileControlAffinity.leading,
-                                        value: enterprisingLike.isChecked!,
-                                        onChanged: (val) {
-                                          setState(() {
-                                            enterprisingLike.isChecked = val!;
-                                          });
-                                        },
-                                        title: Text(
-                                          enterprisingLike.questionText!,
-                                        ),
-                                      ),
-                              ),
-                            ],
-                          );
-                        }),
-                      ),
-                    ),
-
-                    SizedBox(height: 25),
-                    Text(
-                      "Konvensional",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: HexColor('454545'),
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        dataRowMaxHeight: 80,
-                        // Step 2: Define your 3 headers
-                        columns: const <DataColumn>[
-                          DataColumn(
-                            label: Text(
-                              "Saya adalah seorang yang :",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              "Saya mampu :",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              "Saya menyukai :",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                        // Step 3: Add your data rows
-                        rows: List<DataRow>.generate(6, (index) {
-                          var konvensionalIAs = questions
-                              .where(
-                                (element) => element.type == "Konvensional",
-                              )
-                              .where((element) => element.identifier == "i_as")
-                              .elementAt(index);
-                          var konvensionalCan = questions
-                              .where(
-                                (element) => element.type == "Konvensional",
-                              )
-                              .where((element) => element.identifier == "i_can")
-                              .elementAt(index);
-                          var konvensionalLike = questions
-                              .where(
-                                (element) => element.type == "Konvensional",
-                              )
-                              .where(
-                                (element) => element.identifier == "i_like",
-                              )
-                              .elementAt(index);
-                          return DataRow(
-                            cells: <DataCell>[
-                              DataCell(
-                                CheckboxListTile(
-                                  activeColor: HexColor('FBC02D'),
-                                  controlAffinity:
-                                      ListTileControlAffinity.leading,
-                                  value: konvensionalIAs.isChecked!,
-                                  onChanged: (val) {
-                                    setState(() {
-                                      konvensionalIAs.isChecked = val!;
-                                    });
-                                  },
-                                  title: Text(konvensionalIAs.questionText!),
-                                ),
-                              ),
-                              DataCell(
-                                konvensionalCan.questionText == "-"
-                                    ? Text("-")
-                                    : CheckboxListTile(
-                                        activeColor: HexColor('FBC02D'),
-                                        controlAffinity:
-                                            ListTileControlAffinity.leading,
-                                        value: konvensionalCan.isChecked!,
-                                        onChanged: (val) {
-                                          setState(() {
-                                            konvensionalCan.isChecked = val!;
-                                          });
-                                        },
-                                        title: Text(
-                                          konvensionalCan.questionText!,
-                                        ),
-                                      ),
-                              ),
-                              DataCell(
-                                konvensionalLike.questionText == "-"
-                                    ? Text("-")
-                                    : CheckboxListTile(
-                                        activeColor: HexColor('FBC02D'),
-                                        controlAffinity:
-                                            ListTileControlAffinity.leading,
-                                        value: konvensionalLike.isChecked!,
-                                        onChanged: (val) {
-                                          setState(() {
-                                            konvensionalLike.isChecked = val!;
-                                          });
-                                        },
-                                        title: Text(
-                                          konvensionalLike.questionText!,
-                                        ),
-                                      ),
-                              ),
-                            ],
-                          );
-                        }),
-                      ),
-                    ),
-
-                    SizedBox(height: height / 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        // vertical: 5,
-                        horizontal: 17,
-                      ),
-                      child: Container(
-                        width: width / 2.7,
-                        height: 50,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: HexColor('FBC02D'),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          onPressed: () {
-                            send();
-                            // Get.to(() => CompleteTest(title: "Ujian DISC"));
-                          },
-                          child: Text(
-                            "Kirim Jawaban",
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              color: Color(0xffffffff),
-                              fontWeight: FontWeight.w700,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: height / 20),
-                  ],
+          title: Text(
+            "Ujian Holland",
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 25,
+              fontWeight: FontWeight.w500,
+              color: HexColor("454545"),
+            ),
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: ClockWidget(
+                timeSeconds: 1200,
+                redirectTo: () {
+                  Get.to(() => CompleteTest(title: "Ujian Holland"));
+                },
+                textStyle: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: HexColor('828282'),
+                  fontSize: 15,
                 ),
+              ),
+            ),
+          ],
+        ),
+        body: RefreshIndicator(
+          color: HexColor('FBC02D'),
+          onRefresh: () async {
+            loadQuestion();
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15),
+            child: isLoading
+                ? Center(
+                    child: CircularProgressIndicator(color: HexColor('FBC02D')),
+                  )
+                : ListView(
+                    children: [
+                      SizedBox(height: 10),
+                      ExpansionTile(
+                        iconColor: Colors.white,
+                        collapsedIconColor: Colors.white,
+                        collapsedBackgroundColor: Colors.red[700],
+                        collapsedShape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        splashColor: Colors.red[700],
+                        backgroundColor: Colors.red[700],
+                        title: Text(
+                          "Petunjuk Pengisian",
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Pada kuesioner ini terdiri atas 6 tabel, masing-masing tabel terdiri atas 3 kolom kosong yang harus diisi oleh Bapak/Ibu sekalian dengan menggunakan tanda () pada pernyataan yang mencerminkan diri Bapak/Ibu sekalian pada beberapa pertanyaan yang telah disediakan. \nUntuk pemilihan masing-masing pernyataan sangat memungkinkan untuk memilih atau mencentang () lebih dari satu pernyataan pada masing-masing kolom. \nOleh karena itu, kami mengharapkan Bapak/Ibu mencermati dengan seksama setiap pernyataan yang ada, kemudian memilih satu atau lebih dari pernyataan pada masing-masing kolom yang tersedia pada tabel tersebut.",
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+
+                                SizedBox(height: 25),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Center(
+                        child: Text(
+                          "*Dimohon untuk me submit jawaban sebelum waktu ujian berakhir, agar jawaban dapat terekam !",
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: HexColor("454545"),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 25),
+
+                      Text(
+                        "Realistis",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: HexColor('454545'),
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
+                          dataRowMaxHeight: 80,
+                          // Step 2: Define your 3 headers
+                          columns: const <DataColumn>[
+                            DataColumn(
+                              label: Text(
+                                "Saya adalah seorang yang :",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                "Saya mampu :",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                "Saya menyukai :",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                          // Step 3: Add your data rows
+                          rows: List<DataRow>.generate(5, (index) {
+                            var realisticIAs = questions
+                                .where((element) => element.type == "Realistic")
+                                .where(
+                                  (element) => element.identifier == "i_as",
+                                )
+                                .elementAt(index);
+                            var realisticCan = questions
+                                .where((element) => element.type == "Realistic")
+                                .where(
+                                  (element) => element.identifier == "i_can",
+                                )
+                                .elementAt(index);
+                            var realisticLike = questions
+                                .where((element) => element.type == "Realistic")
+                                .where(
+                                  (element) => element.identifier == "i_like",
+                                )
+                                .elementAt(index);
+                            return DataRow(
+                              cells: <DataCell>[
+                                DataCell(
+                                  CheckboxListTile(
+                                    activeColor: HexColor('FBC02D'),
+                                    controlAffinity:
+                                        ListTileControlAffinity.leading,
+                                    value: realisticIAs.isChecked!,
+                                    onChanged: (val) {
+                                      setState(() {
+                                        realisticIAs.isChecked = val!;
+                                      });
+                                    },
+                                    title: Text(realisticIAs.questionText!),
+                                  ),
+                                ),
+                                DataCell(
+                                  CheckboxListTile(
+                                    activeColor: HexColor('FBC02D'),
+                                    controlAffinity:
+                                        ListTileControlAffinity.leading,
+                                    value: realisticCan.isChecked!,
+                                    onChanged: (val) {
+                                      setState(() {
+                                        realisticCan.isChecked = val!;
+                                      });
+                                    },
+                                    title: Text(realisticCan.questionText!),
+                                  ),
+                                ),
+                                DataCell(
+                                  realisticLike.questionText == "-"
+                                      ? Text("-")
+                                      : CheckboxListTile(
+                                          activeColor: HexColor('FBC02D'),
+                                          controlAffinity:
+                                              ListTileControlAffinity.leading,
+                                          value: realisticLike.isChecked!,
+                                          onChanged: (val) {
+                                            setState(() {
+                                              realisticLike.isChecked = val!;
+                                            });
+                                          },
+                                          title: Text(
+                                            realisticLike.questionText!,
+                                          ),
+                                        ),
+                                ),
+                              ],
+                            );
+                          }),
+                        ),
+                      ),
+
+                      SizedBox(height: 25),
+
+                      Text(
+                        "Investigatif",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: HexColor('454545'),
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
+                          dataRowMaxHeight: 80,
+                          // Step 2: Define your 3 headers
+                          columns: const <DataColumn>[
+                            DataColumn(
+                              label: Text(
+                                "Saya adalah seorang yang :",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                "Saya mampu :",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                "Saya menyukai :",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                          // Step 3: Add your data rows
+                          rows: List<DataRow>.generate(7, (index) {
+                            var investigativeIAs = questions
+                                .where(
+                                  (element) => element.type == "Investigative",
+                                )
+                                .where(
+                                  (element) => element.identifier == "i_as",
+                                )
+                                .elementAt(index);
+                            var investigativeCan = questions
+                                .where(
+                                  (element) => element.type == "Investigative",
+                                )
+                                .where(
+                                  (element) => element.identifier == "i_can",
+                                )
+                                .elementAt(index);
+                            var investigativeLike = questions
+                                .where(
+                                  (element) => element.type == "Investigative",
+                                )
+                                .where(
+                                  (element) => element.identifier == "i_like",
+                                )
+                                .elementAt(index);
+                            return DataRow(
+                              cells: <DataCell>[
+                                DataCell(
+                                  CheckboxListTile(
+                                    activeColor: HexColor('FBC02D'),
+                                    controlAffinity:
+                                        ListTileControlAffinity.leading,
+                                    value: investigativeIAs.isChecked!,
+                                    onChanged: (val) {
+                                      setState(() {
+                                        investigativeIAs.isChecked = val!;
+                                      });
+                                    },
+                                    title: Text(investigativeIAs.questionText!),
+                                  ),
+                                ),
+                                DataCell(
+                                  CheckboxListTile(
+                                    activeColor: HexColor('FBC02D'),
+                                    controlAffinity:
+                                        ListTileControlAffinity.leading,
+                                    value: investigativeCan.isChecked!,
+                                    onChanged: (val) {
+                                      setState(() {
+                                        investigativeCan.isChecked = val!;
+                                      });
+                                    },
+                                    title: Text(investigativeCan.questionText!),
+                                  ),
+                                ),
+                                DataCell(
+                                  investigativeLike.questionText == "-"
+                                      ? Text("-")
+                                      : CheckboxListTile(
+                                          activeColor: HexColor('FBC02D'),
+                                          controlAffinity:
+                                              ListTileControlAffinity.leading,
+                                          value: investigativeLike.isChecked!,
+                                          onChanged: (val) {
+                                            setState(() {
+                                              investigativeLike.isChecked =
+                                                  val!;
+                                            });
+                                          },
+                                          title: Text(
+                                            investigativeLike.questionText!,
+                                          ),
+                                        ),
+                                ),
+                              ],
+                            );
+                          }),
+                        ),
+                      ),
+
+                      SizedBox(height: 25),
+                      Text(
+                        "Artistik",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: HexColor('454545'),
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
+                          dataRowMaxHeight: 80,
+                          // Step 2: Define your 3 headers
+                          columns: const <DataColumn>[
+                            DataColumn(
+                              label: Text(
+                                "Saya adalah seorang yang :",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                "Saya mampu :",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                "Saya menyukai :",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                          // Step 3: Add your data rows
+                          rows: List<DataRow>.generate(5, (index) {
+                            var artisticIAs = questions
+                                .where((element) => element.type == "Artistic")
+                                .where(
+                                  (element) => element.identifier == "i_as",
+                                )
+                                .elementAt(index);
+                            var artisticCan = questions
+                                .where((element) => element.type == "Artistic")
+                                .where(
+                                  (element) => element.identifier == "i_can",
+                                )
+                                .elementAt(index);
+                            var artisticLike = questions
+                                .where((element) => element.type == "Artistic")
+                                .where(
+                                  (element) => element.identifier == "i_like",
+                                )
+                                .elementAt(index);
+                            return DataRow(
+                              cells: <DataCell>[
+                                DataCell(
+                                  CheckboxListTile(
+                                    activeColor: HexColor('FBC02D'),
+                                    controlAffinity:
+                                        ListTileControlAffinity.leading,
+                                    value: artisticIAs.isChecked!,
+                                    onChanged: (val) {
+                                      setState(() {
+                                        artisticIAs.isChecked = val!;
+                                      });
+                                    },
+                                    title: Text(artisticIAs.questionText!),
+                                  ),
+                                ),
+                                DataCell(
+                                  artisticCan.questionText == "-"
+                                      ? Text("-")
+                                      : CheckboxListTile(
+                                          activeColor: HexColor('FBC02D'),
+                                          controlAffinity:
+                                              ListTileControlAffinity.leading,
+                                          value: artisticCan.isChecked!,
+                                          onChanged: (val) {
+                                            setState(() {
+                                              artisticCan.isChecked = val!;
+                                            });
+                                          },
+                                          title: Text(
+                                            artisticCan.questionText!,
+                                          ),
+                                        ),
+                                ),
+                                DataCell(
+                                  artisticLike.questionText == "-"
+                                      ? Text("-")
+                                      : CheckboxListTile(
+                                          activeColor: HexColor('FBC02D'),
+                                          controlAffinity:
+                                              ListTileControlAffinity.leading,
+                                          value: artisticLike.isChecked!,
+                                          onChanged: (val) {
+                                            setState(() {
+                                              artisticLike.isChecked = val!;
+                                            });
+                                          },
+                                          title: Text(
+                                            artisticLike.questionText!,
+                                          ),
+                                        ),
+                                ),
+                              ],
+                            );
+                          }),
+                        ),
+                      ),
+
+                      SizedBox(height: 25),
+                      Text(
+                        "Sosial",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: HexColor('454545'),
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
+                          dataRowMaxHeight: 80,
+                          // Step 2: Define your 3 headers
+                          columns: const <DataColumn>[
+                            DataColumn(
+                              label: Text(
+                                "Saya adalah seorang yang :",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                "Saya mampu :",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                "Saya menyukai :",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                          // Step 3: Add your data rows
+                          rows: List<DataRow>.generate(6, (index) {
+                            var socialIAs = questions
+                                .where((element) => element.type == "Social")
+                                .where(
+                                  (element) => element.identifier == "i_as",
+                                )
+                                .elementAt(index);
+                            var socialCan = questions
+                                .where((element) => element.type == "Social")
+                                .where(
+                                  (element) => element.identifier == "i_can",
+                                )
+                                .elementAt(index);
+                            var socialLike = questions
+                                .where((element) => element.type == "Social")
+                                .where(
+                                  (element) => element.identifier == "i_like",
+                                )
+                                .elementAt(index);
+                            return DataRow(
+                              cells: <DataCell>[
+                                DataCell(
+                                  CheckboxListTile(
+                                    activeColor: HexColor('FBC02D'),
+                                    controlAffinity:
+                                        ListTileControlAffinity.leading,
+                                    value: socialIAs.isChecked!,
+                                    onChanged: (val) {
+                                      setState(() {
+                                        socialIAs.isChecked = val!;
+                                      });
+                                    },
+                                    title: Text(socialIAs.questionText!),
+                                  ),
+                                ),
+                                DataCell(
+                                  socialCan.questionText == "-"
+                                      ? Text("-")
+                                      : CheckboxListTile(
+                                          activeColor: HexColor('FBC02D'),
+                                          controlAffinity:
+                                              ListTileControlAffinity.leading,
+                                          value: socialCan.isChecked!,
+                                          onChanged: (val) {
+                                            setState(() {
+                                              socialCan.isChecked = val!;
+                                            });
+                                          },
+                                          title: Text(socialCan.questionText!),
+                                        ),
+                                ),
+                                DataCell(
+                                  socialLike.questionText == "-"
+                                      ? Text("-")
+                                      : CheckboxListTile(
+                                          activeColor: HexColor('FBC02D'),
+                                          controlAffinity:
+                                              ListTileControlAffinity.leading,
+                                          value: socialLike.isChecked!,
+                                          onChanged: (val) {
+                                            setState(() {
+                                              socialLike.isChecked = val!;
+                                            });
+                                          },
+                                          title: Text(socialLike.questionText!),
+                                        ),
+                                ),
+                              ],
+                            );
+                          }),
+                        ),
+                      ),
+
+                      SizedBox(height: 25),
+                      Text(
+                        "Enterprising",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: HexColor('454545'),
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
+                          dataRowMaxHeight: 80,
+                          // Step 2: Define your 3 headers
+                          columns: const <DataColumn>[
+                            DataColumn(
+                              label: Text(
+                                "Saya adalah seorang yang :",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                "Saya mampu :",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                "Saya menyukai :",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                          // Step 3: Add your data rows
+                          rows: List<DataRow>.generate(6, (index) {
+                            var enterprisingIAs = questions
+                                .where(
+                                  (element) => element.type == "Enterprising",
+                                )
+                                .where(
+                                  (element) => element.identifier == "i_as",
+                                )
+                                .elementAt(index);
+                            var enterprisingCan = questions
+                                .where(
+                                  (element) => element.type == "Enterprising",
+                                )
+                                .where(
+                                  (element) => element.identifier == "i_can",
+                                )
+                                .elementAt(index);
+                            var enterprisingLike = questions
+                                .where(
+                                  (element) => element.type == "Enterprising",
+                                )
+                                .where(
+                                  (element) => element.identifier == "i_like",
+                                )
+                                .elementAt(index);
+                            return DataRow(
+                              cells: <DataCell>[
+                                DataCell(
+                                  CheckboxListTile(
+                                    activeColor: HexColor('FBC02D'),
+                                    controlAffinity:
+                                        ListTileControlAffinity.leading,
+                                    value: enterprisingIAs.isChecked!,
+                                    onChanged: (val) {
+                                      setState(() {
+                                        enterprisingIAs.isChecked = val!;
+                                      });
+                                    },
+                                    title: Text(enterprisingIAs.questionText!),
+                                  ),
+                                ),
+                                DataCell(
+                                  enterprisingCan.questionText == "-"
+                                      ? Text("-")
+                                      : CheckboxListTile(
+                                          activeColor: HexColor('FBC02D'),
+                                          controlAffinity:
+                                              ListTileControlAffinity.leading,
+                                          value: enterprisingCan.isChecked!,
+                                          onChanged: (val) {
+                                            setState(() {
+                                              enterprisingCan.isChecked = val!;
+                                            });
+                                          },
+                                          title: Text(
+                                            enterprisingCan.questionText!,
+                                          ),
+                                        ),
+                                ),
+                                DataCell(
+                                  enterprisingLike.questionText == "-"
+                                      ? Text("-")
+                                      : CheckboxListTile(
+                                          activeColor: HexColor('FBC02D'),
+                                          controlAffinity:
+                                              ListTileControlAffinity.leading,
+                                          value: enterprisingLike.isChecked!,
+                                          onChanged: (val) {
+                                            setState(() {
+                                              enterprisingLike.isChecked = val!;
+                                            });
+                                          },
+                                          title: Text(
+                                            enterprisingLike.questionText!,
+                                          ),
+                                        ),
+                                ),
+                              ],
+                            );
+                          }),
+                        ),
+                      ),
+
+                      SizedBox(height: 25),
+                      Text(
+                        "Konvensional",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: HexColor('454545'),
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
+                          dataRowMaxHeight: 80,
+                          // Step 2: Define your 3 headers
+                          columns: const <DataColumn>[
+                            DataColumn(
+                              label: Text(
+                                "Saya adalah seorang yang :",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                "Saya mampu :",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                "Saya menyukai :",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                          // Step 3: Add your data rows
+                          rows: List<DataRow>.generate(6, (index) {
+                            var konvensionalIAs = questions
+                                .where(
+                                  (element) => element.type == "Konvensional",
+                                )
+                                .where(
+                                  (element) => element.identifier == "i_as",
+                                )
+                                .elementAt(index);
+                            var konvensionalCan = questions
+                                .where(
+                                  (element) => element.type == "Konvensional",
+                                )
+                                .where(
+                                  (element) => element.identifier == "i_can",
+                                )
+                                .elementAt(index);
+                            var konvensionalLike = questions
+                                .where(
+                                  (element) => element.type == "Konvensional",
+                                )
+                                .where(
+                                  (element) => element.identifier == "i_like",
+                                )
+                                .elementAt(index);
+                            return DataRow(
+                              cells: <DataCell>[
+                                DataCell(
+                                  CheckboxListTile(
+                                    activeColor: HexColor('FBC02D'),
+                                    controlAffinity:
+                                        ListTileControlAffinity.leading,
+                                    value: konvensionalIAs.isChecked!,
+                                    onChanged: (val) {
+                                      setState(() {
+                                        konvensionalIAs.isChecked = val!;
+                                      });
+                                    },
+                                    title: Text(konvensionalIAs.questionText!),
+                                  ),
+                                ),
+                                DataCell(
+                                  konvensionalCan.questionText == "-"
+                                      ? Text("-")
+                                      : CheckboxListTile(
+                                          activeColor: HexColor('FBC02D'),
+                                          controlAffinity:
+                                              ListTileControlAffinity.leading,
+                                          value: konvensionalCan.isChecked!,
+                                          onChanged: (val) {
+                                            setState(() {
+                                              konvensionalCan.isChecked = val!;
+                                            });
+                                          },
+                                          title: Text(
+                                            konvensionalCan.questionText!,
+                                          ),
+                                        ),
+                                ),
+                                DataCell(
+                                  konvensionalLike.questionText == "-"
+                                      ? Text("-")
+                                      : CheckboxListTile(
+                                          activeColor: HexColor('FBC02D'),
+                                          controlAffinity:
+                                              ListTileControlAffinity.leading,
+                                          value: konvensionalLike.isChecked!,
+                                          onChanged: (val) {
+                                            setState(() {
+                                              konvensionalLike.isChecked = val!;
+                                            });
+                                          },
+                                          title: Text(
+                                            konvensionalLike.questionText!,
+                                          ),
+                                        ),
+                                ),
+                              ],
+                            );
+                          }),
+                        ),
+                      ),
+
+                      SizedBox(height: height / 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          // vertical: 5,
+                          horizontal: 17,
+                        ),
+                        child: Container(
+                          width: width / 2.7,
+                          height: 50,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: HexColor('FBC02D'),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            onPressed: () {
+                              send();
+                              // Get.to(() => CompleteTest(title: "Ujian DISC"));
+                            },
+                            child: Text(
+                              "Kirim Jawaban",
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                color: Color(0xffffffff),
+                                fontWeight: FontWeight.w700,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: height / 20),
+                    ],
+                  ),
+          ),
         ),
       ),
     );

@@ -12,6 +12,8 @@ import 'package:mobile_choise/models/CepatTelitiQuestion.dart';
 import 'package:mobile_choise/screen/components/carousel_card.dart';
 import 'package:mobile_choise/screen/components/complete_test.dart';
 import 'package:mobile_choise/screen/components/dialog_components.dart';
+import 'package:mobile_choise/screen/components/exit_dialog.dart';
+import 'package:mobile_choise/screen/exam_dashboard.dart';
 import 'package:mobile_choise/utils/base_url.dart';
 import 'package:mobile_choise/utils/hex_color.dart';
 import 'package:mobile_choise/widgets/clock_widget.dart';
@@ -403,277 +405,391 @@ class _CepatTelitiTestScreenState extends State<CepatTelitiTestScreen> {
     }
   }
 
+  Future<bool> _showExitConfirmation(BuildContext context) async {
+    final textTheme = Theme.of(context).textTheme;
+    final result = await showDialog<bool>(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          title: Row(
+            children: [
+              Icon(
+                Icons.warning_amber_rounded,
+                color: Color(0xFFD69E2E),
+                size: 24,
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                'Peringatan',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          content: const Text(
+            'Jika kamu kembali atau tidak melanjutkan tes, semua data yang telah diisi akan dihapus dan tidak terkirim. Apakah kamu yakin ingin keluar dari tes?',
+            style: TextStyle(fontFamily: 'Poppins', fontSize: 14, height: 1.4),
+          ),
+          actionsOverflowButtonSpacing: 5,
+          actionsOverflowDirection: VerticalDirection.down,
+          actions: [
+            Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: HexColor('FBC02D')),
+                        ),
+                      ),
+                      child: Text(
+                        'Lanjutkan Tes',
+                        style: textTheme.labelMedium?.copyWith(
+                          fontFamily: 'Poppins',
+                          color: HexColor('FBC02D'),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: SizedBox(
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.off(() => ExamDashboard());
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red[700],
+                        foregroundColor: HexColor("FFFFFF"),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        'Keluar Tes',
+                        style: textTheme.labelMedium?.copyWith(
+                          fontFamily: 'Poppins',
+                          color: HexColor("FFFFFF"),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+    return result ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    return PopScope(
+      canPop: false, // Prevents automatic popping
+      onPopInvokedWithResult: (didPop, result) async {
+        // If the system already handled the pop, don't do anything
+        if (didPop) return;
+
+        // Show the dialog and wait for the user's choice
+        final shouldPop = await _showExitConfirmation(context);
+
+        // Crucial: Check if the widget is still "mounted" before using context
+        if (context.mounted && (shouldPop)) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
         backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {},
-          icon: Icon(
-            CupertinoIcons.left_chevron,
-            fontWeight: FontWeight.w700,
-            color: HexColor("454545"),
-          ),
-        ),
-        title: Text(
-          "Tes Cepat Teliti",
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 25,
-            fontWeight: FontWeight.w500,
-            color: HexColor("454545"),
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: ClockWidget(
-              timeSeconds: 720,
-              redirectTo: () {
-                Get.to(() => CompleteTest(title: "Tes Cepat Teliti"));
-              },
-              textStyle: TextStyle(
-                fontFamily: 'Poppins',
-                color: HexColor('828282'),
-                fontSize: 15,
-              ),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            onPressed: () {
+              showExitConfirmation(context);
+            },
+            icon: Icon(
+              CupertinoIcons.left_chevron,
+              fontWeight: FontWeight.w700,
+              color: HexColor("454545"),
             ),
           ),
-        ],
-      ),
-      body: RefreshIndicator(
-        color: HexColor('FBC02D'),
-        onRefresh: () async {
-          loadQuestion();
-          loadAnswer();
-        },
-        child: isLoading
-            ? Center(
-                child: CircularProgressIndicator(color: HexColor('FBC02D')),
-              )
-            : Padding(
-                padding: const EdgeInsets.only(left: 15, right: 15),
-                child: ListView(
-                  children: [
-                    SizedBox(height: 10),
-                    ExpansionTile(
-                      iconColor: Colors.white,
-                      collapsedIconColor: Colors.white,
-                      collapsedBackgroundColor: HexColor('FBC02D'),
-                      collapsedShape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      splashColor: HexColor('FBC02D'),
-                      backgroundColor: HexColor('FBC02D'),
-                      title: Text(
-                        "INSTRUKSI TES!",
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "1. Dalam tes ini anda akan dihadapkan pada 100 soal yang akan dikerjakan dalam waktu yg terbatas.",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                "2. Tes ini bertujuan untuk membandingkan pasangan huruf dan angka yang ada di setiap soalnya.",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                "3. Di setiap soal terdapat 5 pasang kombinasi huruf dan angka dalam susunan yg berbeda-beda.",
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                '4. Tugas anda adalah mencari "SATU KESAMAAN" kombinasi huruf dan angka yang "DIGARISBAWAHI" di soal dengan pilihan jawaban yang sudah disediakan.',
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              SizedBox(height: 25),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(height: 15),
-
-                    Container(
-                      width: width / 1.2,
-                      height: height / 14,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: questions.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                nomorSoal = questions[index].noSoal!;
-                              });
-                              loadAnswer();
-                              setChoiceList();
-                              setAnswer();
-                            },
-                            child: CarouselCard(
-                              id: questions[index].noSoal.toString(),
-                              isSelected:
-                                  answer
-                                      .where(
-                                        (element) =>
-                                            element.noSoal ==
-                                            questions[index].noSoal,
-                                      )
-                                      .isNotEmpty
-                                  ? true
-                                  : false,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    Text(
-                      "Pertanyaan $nomorSoal",
-                      // textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: HexColor('454545'),
-                        fontSize: 27,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    // SizedBox(height: height / 30),
-                    Html(
-                      data: questions.isEmpty
-                          ? ""
-                          : "<h1>${questions.where((index) => index.noSoal == nomorSoal).first.soal}</h1>",
-                      style: {
-                        "p": Style(
-                          fontStyle: TextStyle(
-                            fontFamily: 'Poppins',
-                            color: HexColor('454545'),
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                          ).fontStyle,
-                        ),
-                      },
-                    ),
-                    DottedBorder(
-                      options: RoundedRectDottedBorderOptions(
-                        strokeCap: StrokeCap.round,
-                        color: HexColor('FBC02D'),
-                        dashPattern: [10, 5],
-                        strokeWidth: 2,
-                        padding: EdgeInsets.all(16),
-                        radius: Radius.circular(16),
-                      ),
-                      child: Container(
-                        height: height / 2.5,
-                        width: width,
-                        child: ListView(
-                          physics: NeverScrollableScrollPhysics(),
-                          children: List.generate(
-                            4,
-                            (index) => GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  selectedIndex = index;
-                                  // selectedChoice = questions
-                                  //     .where(
-                                  //       (element) =>
-                                  //           element.noSoal == nomorSoal,
-                                  //     )
-                                  //     .first
-                                  //     .jawaban!;
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: HexColor("FBC02D"),
-                                      width: 2,
-                                    ),
-                                    color: index == selectedIndex
-                                        ? HexColor("FBC02D")
-                                        : Colors.white,
-                                    borderRadius: BorderRadius.circular(14),
-                                  ),
-
-                                  height: height / 13,
-                                  width: 100,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      top: 12,
-                                      bottom: 12,
-                                      left: 25,
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        SizedBox(width: 20),
-                                        Text(
-                                          choiceList.isEmpty
-                                              ? " "
-                                              : choiceList[index],
-                                          style: TextStyle(
-                                            fontFamily: 'Poppins',
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold,
-                                            color: index == selectedIndex
-                                                ? Colors.white
-                                                : HexColor("FBC02D"),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: height / 10),
-                    bottomBtn(width, height),
-                  ],
+          title: Text(
+            "Tes Cepat Teliti",
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 25,
+              fontWeight: FontWeight.w500,
+              color: HexColor("454545"),
+            ),
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: ClockWidget(
+                timeSeconds: 720,
+                redirectTo: () {
+                  Get.to(() => CompleteTest(title: "Tes Cepat Teliti"));
+                },
+                textStyle: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: HexColor('828282'),
+                  fontSize: 15,
                 ),
               ),
+            ),
+          ],
+        ),
+        body: RefreshIndicator(
+          color: HexColor('FBC02D'),
+          onRefresh: () async {
+            loadQuestion();
+            loadAnswer();
+          },
+          child: isLoading
+              ? Center(
+                  child: CircularProgressIndicator(color: HexColor('FBC02D')),
+                )
+              : Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 15),
+                  child: ListView(
+                    children: [
+                      SizedBox(height: 10),
+                      ExpansionTile(
+                        iconColor: Colors.white,
+                        collapsedIconColor: Colors.white,
+                        collapsedBackgroundColor: Colors.red[700],
+                        collapsedShape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        splashColor: Colors.red[700],
+                        backgroundColor: Colors.red[700],
+                        title: Text(
+                          "INSTRUKSI TES!",
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "1. Dalam tes ini anda akan dihadapkan pada 100 soal yang akan dikerjakan dalam waktu yg terbatas.",
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(
+                                  "2. Tes ini bertujuan untuk membandingkan pasangan huruf dan angka yang ada di setiap soalnya.",
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(
+                                  "3. Di setiap soal terdapat 5 pasang kombinasi huruf dan angka dalam susunan yg berbeda-beda.",
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(
+                                  '4. Tugas anda adalah mencari "SATU KESAMAAN" kombinasi huruf dan angka yang "DIGARISBAWAHI" di soal dengan pilihan jawaban yang sudah disediakan.',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(height: 25),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      SizedBox(height: 15),
+
+                      Container(
+                        width: width / 1.2,
+                        height: height / 14,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: questions.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  nomorSoal = questions[index].noSoal!;
+                                });
+                                loadAnswer();
+                                setChoiceList();
+                                setAnswer();
+                              },
+                              child: CarouselCard(
+                                id: questions[index].noSoal.toString(),
+                                isSelected:
+                                    answer
+                                        .where(
+                                          (element) =>
+                                              element.noSoal ==
+                                              questions[index].noSoal,
+                                        )
+                                        .isNotEmpty
+                                    ? true
+                                    : false,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      Text(
+                        "Pertanyaan $nomorSoal",
+                        // textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: HexColor('454545'),
+                          fontSize: 27,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      // SizedBox(height: height / 30),
+                      Html(
+                        data: questions.isEmpty
+                            ? ""
+                            : "<h1>${questions.where((index) => index.noSoal == nomorSoal).first.soal}</h1>",
+                        style: {
+                          "p": Style(
+                            fontStyle: TextStyle(
+                              fontFamily: 'Poppins',
+                              color: HexColor('454545'),
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                            ).fontStyle,
+                          ),
+                        },
+                      ),
+                      DottedBorder(
+                        options: RoundedRectDottedBorderOptions(
+                          strokeCap: StrokeCap.round,
+                          color: HexColor('FBC02D'),
+                          dashPattern: [10, 5],
+                          strokeWidth: 2,
+                          padding: EdgeInsets.all(16),
+                          radius: Radius.circular(16),
+                        ),
+                        child: Container(
+                          height: height / 2.5,
+                          width: width,
+                          child: ListView(
+                            physics: NeverScrollableScrollPhysics(),
+                            children: List.generate(
+                              4,
+                              (index) => GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedIndex = index;
+                                    // selectedChoice = questions
+                                    //     .where(
+                                    //       (element) =>
+                                    //           element.noSoal == nomorSoal,
+                                    //     )
+                                    //     .first
+                                    //     .jawaban!;
+                                  });
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: HexColor("FBC02D"),
+                                        width: 2,
+                                      ),
+                                      color: index == selectedIndex
+                                          ? HexColor("FBC02D")
+                                          : Colors.white,
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+
+                                    height: height / 13,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                        top: 12,
+                                        bottom: 12,
+                                        left: 25,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(width: 20),
+                                          Text(
+                                            choiceList.isEmpty
+                                                ? " "
+                                                : choiceList[index],
+                                            style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.bold,
+                                              color: index == selectedIndex
+                                                  ? Colors.white
+                                                  : HexColor("FBC02D"),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: height / 10),
+                      bottomBtn(width, height),
+                    ],
+                  ),
+                ),
+        ),
       ),
     );
   }
