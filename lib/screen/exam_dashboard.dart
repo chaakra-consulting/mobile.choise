@@ -22,6 +22,7 @@ import 'package:mobile_choise/utils/hex_color.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_choise/utils/redirect_screen.dart';
 import 'package:mobile_choise/utils/timezone.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ExamDashboard extends StatefulWidget {
   const ExamDashboard({super.key});
@@ -76,6 +77,7 @@ class _ExamDashboardState extends State<ExamDashboard> {
     });
 
     try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
       var url = Uri.parse("$baseUrl/exam-list");
       final response = await http.get(url);
       // print(response.body);
@@ -91,6 +93,17 @@ class _ExamDashboardState extends State<ExamDashboard> {
             examData.addAll(
               data.map((dynamic json) {
                 final map = json as Map<String, dynamic>;
+                if (map['nama_ujian'] == "Tes Intelegensi 1 (CFIT) ") {
+                  print(map['start_uji_sub1']);
+                  prefs.setString("start_uji_sub1", map['start_uji_sub1']);
+                  prefs.setString("start_uji_sub2", map['start_uji_sub2']);
+                  prefs.setString("start_uji_sub3", map['start_uji_sub3']);
+                  prefs.setString("start_uji_sub4", map['start_uji_sub4']);
+                  prefs.setString("end_uji_sub1", map['end_uji_sub1']);
+                  prefs.setString("end_uji_sub2", map['end_uji_sub2']);
+                  prefs.setString("end_uji_sub3", map['end_uji_sub3']);
+                  prefs.setString("end_uji_sub4", map['end_uji_sub4']);
+                }
                 return ExamList(
                   namaUjian: map['nama_ujian'],
                   status: map['status'],
@@ -296,10 +309,10 @@ class _ExamDashboardState extends State<ExamDashboard> {
                             // );
                             return ExamCard(
                               title: examList[index].namaUjian,
-                              status: true,
-                              // status: DateTime.now().isBefore(
-                              //   examList[index].waktuAkhir,
-                              // ),
+                              // status: true,
+                              status: DateTime.now().isBefore(
+                                examList[index].waktuAkhir,
+                              ),
                               // &&
                               // isTzNotMatch == true,
                               waktuMulai: examList[index].waktuMulai,

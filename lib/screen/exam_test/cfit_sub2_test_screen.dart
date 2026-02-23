@@ -12,6 +12,7 @@ import 'package:mobile_choise/models/CFITQuestion.dart';
 import 'package:mobile_choise/screen/components/carousel_card.dart';
 import 'package:mobile_choise/screen/components/complete_test.dart';
 import 'package:mobile_choise/screen/components/dialog_components.dart';
+import 'package:mobile_choise/screen/exam_dashboard.dart';
 import 'package:mobile_choise/screen/exam_test/cfit_sub3_test_screen.dart';
 import 'package:mobile_choise/utils/base_url.dart';
 import 'package:mobile_choise/utils/cfit_instructions.dart';
@@ -54,6 +55,26 @@ class _CfitSub2TestScreenState extends State<CfitSub2TestScreen> {
     });
     loadAnswer();
     loadQuestion();
+    redirectToNextTest();
+  }
+
+  redirectToNextTest() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (DateTime.now().isAfter(
+      DateTime.parse(prefs.getString("end_uji_sub2")!),
+    )) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Waktu Habis, melanjutkan ke subtes berikutnya",
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Color(0xFF38A169),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      Get.to(() => CfitSub3TestScreen(targetSubtes: 3));
+    }
   }
 
   void setAnswer() async {
@@ -432,201 +453,313 @@ class _CfitSub2TestScreenState extends State<CfitSub2TestScreen> {
     }
   }
 
+  Future<bool> _showExitConfirmation(BuildContext context) async {
+    final textTheme = Theme.of(context).textTheme;
+    final result = await showDialog<bool>(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          title: Row(
+            children: [
+              Icon(
+                Icons.warning_amber_rounded,
+                color: Color(0xFFD69E2E),
+                size: 24,
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                'Peringatan',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          content: const Text(
+            'Jika kamu kembali atau tidak melanjutkan tes, semua data yang telah diisi akan dihapus dan tidak terkirim. Apakah kamu yakin ingin keluar dari tes?',
+            style: TextStyle(fontFamily: 'Poppins', fontSize: 14, height: 1.4),
+          ),
+          actionsOverflowButtonSpacing: 5,
+          actionsOverflowDirection: VerticalDirection.down,
+          actions: [
+            Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: HexColor('FBC02D')),
+                        ),
+                      ),
+                      child: Text(
+                        'Lanjutkan Tes',
+                        style: textTheme.labelMedium?.copyWith(
+                          fontFamily: 'Poppins',
+                          color: HexColor('FBC02D'),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: SizedBox(
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.off(() => ExamDashboard());
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red[700],
+                        foregroundColor: HexColor("FFFFFF"),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        'Keluar Tes',
+                        style: textTheme.labelMedium?.copyWith(
+                          fontFamily: 'Poppins',
+                          color: HexColor("FFFFFF"),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+    return result ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    return PopScope(
+      canPop: false, // Prevents automatic popping
+      onPopInvokedWithResult: (didPop, result) async {
+        // If the system already handled the pop, don't do anything
+        if (didPop) return;
+
+        // Show the dialog and wait for the user's choice
+        final shouldPop = await _showExitConfirmation(context);
+
+        // Crucial: Check if the widget is still "mounted" before using context
+        if (context.mounted && (shouldPop)) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
         backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {},
-          icon: Icon(
-            CupertinoIcons.left_chevron,
-            fontWeight: FontWeight.w700,
-            color: HexColor("454545"),
-          ),
-        ),
-        title: Text(
-          "Ujian CFIT Sub $subtes",
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 25,
-            fontWeight: FontWeight.w500,
-            color: HexColor("454545"),
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: ClockWidget(
-              timeSeconds: 180,
-              redirectTo: () {
-                Get.to(() => CfitSub3TestScreen(targetSubtes: 3));
-              },
-              textStyle: TextStyle(
-                fontFamily: 'Poppins',
-                color: HexColor('828282'),
-                fontSize: 15,
-              ),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            onPressed: () {},
+            icon: Icon(
+              CupertinoIcons.left_chevron,
+              fontWeight: FontWeight.w700,
+              color: HexColor("454545"),
             ),
           ),
-        ],
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          loadAnswer();
-          loadQuestion();
-        },
-        color: HexColor('FBC02D'),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15),
-          child: ListView(
-            children: [
-              SizedBox(height: 25),
-              showCFITInstructions(subtes, context),
-              SizedBox(height: 10),
-              Container(
-                width: width / 1.2,
-                height: height / 14,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: questions.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          nomorSoal = questions[index].nomorSoal!;
-                        });
-                        loadAnswer();
-                        setAnswer();
-                      },
-                      child: CarouselCard(
-                        id: questions[index].nomorSoal.toString(),
-                        isSelected:
-                            answer
-                                .where(
-                                  (element) =>
-                                      element.nomorSoal ==
-                                      questions[index].nomorSoal,
-                                )
-                                .isNotEmpty
-                            ? true
-                            : false,
-                      ),
-                    );
-                  },
-                ),
-              ),
-              SizedBox(height: height / 30),
-
-              Text(
-                "Pertanyaan $nomorSoal",
-                // textAlign: TextAlign.center,
-                style: TextStyle(
+          title: Text(
+            "Ujian CFIT Sub $subtes",
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 25,
+              fontWeight: FontWeight.w500,
+              color: HexColor("454545"),
+            ),
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: ClockWidget(
+                timeSeconds: 180,
+                redirectTo: () {
+                  Get.to(() => CfitSub3TestScreen(targetSubtes: 3));
+                },
+                textStyle: TextStyle(
                   fontFamily: 'Poppins',
-                  color: HexColor('454545'),
-                  fontSize: 27,
-                  fontWeight: FontWeight.w900,
+                  color: HexColor('828282'),
+                  fontSize: 15,
                 ),
               ),
-
-              SizedBox(height: height / 30),
-              DottedBorder(
-                options: RoundedRectDottedBorderOptions(
-                  strokeCap: StrokeCap.round,
-                  color: HexColor('FBC02D'),
-                  dashPattern: [10, 5],
-                  strokeWidth: 2,
-                  padding: EdgeInsets.all(16),
-                  radius: Radius.circular(16),
+            ),
+          ],
+        ),
+        body: RefreshIndicator(
+          onRefresh: () async {
+            loadAnswer();
+            loadQuestion();
+          },
+          color: HexColor('FBC02D'),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15),
+            child: ListView(
+              children: [
+                SizedBox(height: 25),
+                showCFITInstructions(subtes, context),
+                SizedBox(height: 10),
+                Container(
+                  width: width / 1.2,
+                  height: height / 14,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: questions.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            nomorSoal = questions[index].nomorSoal!;
+                          });
+                          loadAnswer();
+                          setAnswer();
+                        },
+                        child: CarouselCard(
+                          id: questions[index].nomorSoal.toString(),
+                          isSelected:
+                              answer
+                                  .where(
+                                    (element) =>
+                                        element.nomorSoal ==
+                                        questions[index].nomorSoal,
+                                  )
+                                  .isNotEmpty
+                              ? true
+                              : false,
+                        ),
+                      );
+                    },
+                  ),
                 ),
-                child: Container(
-                  height: height / 3.7,
-                  width: width,
-                  child: GridView.count(
-                    childAspectRatio: 1.0,
-                    crossAxisCount: 3,
-                    children: List.generate(
-                      5,
-                      (index) => Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              if (selectedIndices.contains(index)) {
-                                // Deselect if already tapped
-                                selectedIndices.remove(index);
-                              } else {
-                                // Add if we have room (less than 2 selected)
-                                if (selectedIndices.length < 2) {
-                                  selectedIndices.add(index);
+                SizedBox(height: height / 30),
+
+                Text(
+                  "Pertanyaan $nomorSoal",
+                  // textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: HexColor('454545'),
+                    fontSize: 27,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+
+                SizedBox(height: height / 30),
+                DottedBorder(
+                  options: RoundedRectDottedBorderOptions(
+                    strokeCap: StrokeCap.round,
+                    color: HexColor('FBC02D'),
+                    dashPattern: [10, 5],
+                    strokeWidth: 2,
+                    padding: EdgeInsets.all(16),
+                    radius: Radius.circular(16),
+                  ),
+                  child: Container(
+                    height: height / 3.7,
+                    width: width,
+                    child: GridView.count(
+                      childAspectRatio: 1.0,
+                      crossAxisCount: 3,
+                      children: List.generate(
+                        5,
+                        (index) => Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                if (selectedIndices.contains(index)) {
+                                  // Deselect if already tapped
+                                  selectedIndices.remove(index);
                                 } else {
-                                  // Optional: Replace the last selection if 3rd is tapped
-                                  selectedIndices.removeAt(0);
-                                  selectedIndices.add(index);
+                                  // Add if we have room (less than 2 selected)
+                                  if (selectedIndices.length < 2) {
+                                    selectedIndices.add(index);
+                                  } else {
+                                    // Optional: Replace the last selection if 3rd is tapped
+                                    selectedIndices.removeAt(0);
+                                    selectedIndices.add(index);
+                                  }
                                 }
-                              }
 
-                              // Map the selections to your variables
-                              var questionData = questions.firstWhere(
-                                (e) => e.nomorSoal == nomorSoal,
-                              );
-
-                              // Reset and re-assign based on current list
-                              jawaban = selectedIndices.isNotEmpty
-                                  ? alphabeticOrder[selectedIndices[0]]
-                                  : null;
-                              jawaban2 = selectedIndices.length > 1
-                                  ? alphabeticOrder[selectedIndices[1]]
-                                  : null;
-                            });
-                            print(
-                              "Jawaban Kunci ${questions[nomorSoal - 1].jawaban}",
-                            );
-                            print(
-                              "Jawaban Kunci2 ${questions[nomorSoal - 1].jawaban2}",
-                            );
-                            print("Jawaban2 $jawaban2");
-                            print("Nomor Soal $nomorSoal");
-                            sendAnswer();
-                            // print("Selected choice: ${alphabeticOrder[index]}");
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: selectedIndices.contains(index)
-                                    ? HexColor("FBC02D")
-                                    : Colors.white,
-                                width: 5,
-                              ),
-                              color: HexColor("D9D9D9"),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-
-                            height: height / 3,
-                            width: width / 2.5,
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              height: 100,
-                              width: width / 1.3,
-                              imageUrl:
-                                  "$choiseUrl/upload/bank_soal/cfit/${subtes}_$nomorSoal${alphabeticOrder[index]}.png",
-                              progressIndicatorBuilder:
-                                  (context, url, downloadProgress) => Center(
-                                    child: CircularProgressIndicator(
-                                      color: HexColor('FBC02D'),
-                                      value: downloadProgress.progress,
-                                    ),
-                                  ),
-                              errorWidget: (context, url, error) {
-                                print(error);
-                                return Icon(
-                                  Icons.error,
-                                  color: HexColor('FBC02D'),
+                                // Map the selections to your variables
+                                var questionData = questions.firstWhere(
+                                  (e) => e.nomorSoal == nomorSoal,
                                 );
-                              },
+
+                                // Reset and re-assign based on current list
+                                jawaban = selectedIndices.isNotEmpty
+                                    ? alphabeticOrder[selectedIndices[0]]
+                                    : null;
+                                jawaban2 = selectedIndices.length > 1
+                                    ? alphabeticOrder[selectedIndices[1]]
+                                    : null;
+                              });
+                              print(
+                                "Jawaban Kunci ${questions[nomorSoal - 1].jawaban}",
+                              );
+                              print(
+                                "Jawaban Kunci2 ${questions[nomorSoal - 1].jawaban2}",
+                              );
+                              print("Jawaban2 $jawaban2");
+                              print("Nomor Soal $nomorSoal");
+                              sendAnswer();
+                              // print("Selected choice: ${alphabeticOrder[index]}");
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: selectedIndices.contains(index)
+                                      ? HexColor("FBC02D")
+                                      : Colors.white,
+                                  width: 5,
+                                ),
+                                color: HexColor("D9D9D9"),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+
+                              height: height / 3,
+                              width: width / 2.5,
+                              child: CachedNetworkImage(
+                                fit: BoxFit.cover,
+                                height: 100,
+                                width: width / 1.3,
+                                imageUrl:
+                                    "$choiseUrl/upload/bank_soal/cfit/${subtes}_$nomorSoal${alphabeticOrder[index]}.png",
+                                progressIndicatorBuilder:
+                                    (context, url, downloadProgress) => Center(
+                                      child: CircularProgressIndicator(
+                                        color: HexColor('FBC02D'),
+                                        value: downloadProgress.progress,
+                                      ),
+                                    ),
+                                errorWidget: (context, url, error) {
+                                  print(error);
+                                  return Icon(
+                                    Icons.error,
+                                    color: HexColor('FBC02D'),
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ),
@@ -634,12 +767,12 @@ class _CfitSub2TestScreenState extends State<CfitSub2TestScreen> {
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: height / 7),
+                SizedBox(height: height / 7),
 
-              bottomBtn(width, height),
-              SizedBox(height: 10),
-            ],
+                bottomBtn(width, height),
+                SizedBox(height: 10),
+              ],
+            ),
           ),
         ),
       ),

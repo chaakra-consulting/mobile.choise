@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,6 +17,19 @@ class CompleteTest extends StatefulWidget {
 }
 
 class _CompleteTestState extends State<CompleteTest> {
+  @override
+  void initState() {
+    super.initState();
+    redirectToHome();
+  }
+
+  void redirectToHome() {
+    Timer(const Duration(seconds: 3), () {
+      Get.off(() => ExamDashboard());
+      // Get.offAll(const LoginScreen());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;

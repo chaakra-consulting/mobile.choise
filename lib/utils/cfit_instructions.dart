@@ -12,13 +12,13 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
       return ExpansionTile(
         iconColor: Colors.white,
         collapsedIconColor: Colors.white,
-        collapsedBackgroundColor: HexColor('FBC02D'),
+        collapsedBackgroundColor: Colors.red[700],
         collapsedShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        splashColor: HexColor('FBC02D'),
-        backgroundColor: HexColor('FBC02D'),
+        splashColor: Colors.red[700],
+        backgroundColor: Colors.red[700],
         title: Text(
           "INSTRUKSI TES!",
           style: TextStyle(
@@ -308,13 +308,13 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
       return ExpansionTile(
         iconColor: Colors.white,
         collapsedIconColor: Colors.white,
-        collapsedBackgroundColor: HexColor('FBC02D'),
+        collapsedBackgroundColor: Colors.red[700],
         collapsedShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        splashColor: HexColor('FBC02D'),
-        backgroundColor: HexColor('FBC02D'),
+        splashColor: Colors.red[700],
+        backgroundColor: Colors.red[700],
         title: Text(
           "INSTRUKSI TES!",
           style: TextStyle(
@@ -558,13 +558,13 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
       return ExpansionTile(
         iconColor: Colors.white,
         collapsedIconColor: Colors.white,
-        collapsedBackgroundColor: HexColor('FBC02D'),
+        collapsedBackgroundColor: Colors.red[700],
         collapsedShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        splashColor: HexColor('FBC02D'),
-        backgroundColor: HexColor('FBC02D'),
+        splashColor: Colors.red[700],
+        backgroundColor: Colors.red[700],
         title: Text(
           "INSTRUKSI TES!",
           style: TextStyle(
@@ -862,13 +862,13 @@ Widget showCFITInstructions(int subTest, BuildContext context) {
       return ExpansionTile(
         iconColor: Colors.white,
         collapsedIconColor: Colors.white,
-        collapsedBackgroundColor: HexColor('FBC02D'),
+        collapsedBackgroundColor: Colors.red[700],
         collapsedShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        splashColor: HexColor('FBC02D'),
-        backgroundColor: HexColor('FBC02D'),
+        splashColor: Colors.red[700],
+        backgroundColor: Colors.red[700],
         title: Text(
           "INSTRUKSI TES!",
           style: TextStyle(

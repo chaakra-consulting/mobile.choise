@@ -28,9 +28,8 @@ class _SplashScreenState extends State<SplashScreen> {
     var token = prefs.getString('token');
     // runApp(MaterialApp(home: email == null ? Login() : Home()));
     Timer(const Duration(seconds: 3), () {
-      // Get.offAll(token == null ? const LoginScreen() : DashboardScreen());
-      // Get.offAll(token == null ? const LoginPage() : const JurnalBaruPage());
-      Get.offAll(const LoginScreen());
+      Get.offAll(token == null ? const LoginScreen() : DashboardScreen());
+      // Get.offAll(const LoginScreen());
     });
   }
 
