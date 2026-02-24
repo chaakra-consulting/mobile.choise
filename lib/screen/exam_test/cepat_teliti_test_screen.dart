@@ -20,7 +20,13 @@ import 'package:mobile_choise/widgets/clock_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CepatTelitiTestScreen extends StatefulWidget {
-  const CepatTelitiTestScreen({super.key});
+  final DateTime endTime;
+  final DateTime startTime;
+  const CepatTelitiTestScreen({
+    super.key,
+    required this.endTime,
+    required this.startTime,
+  });
 
   @override
   State<CepatTelitiTestScreen> createState() => _CepatTelitiTestScreenState();
@@ -412,6 +418,7 @@ class _CepatTelitiTestScreenState extends State<CepatTelitiTestScreen> {
       barrierDismissible: true,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -434,7 +441,7 @@ class _CepatTelitiTestScreenState extends State<CepatTelitiTestScreen> {
             ],
           ),
           content: const Text(
-            'Jika kamu kembali atau tidak melanjutkan tes, semua data yang telah diisi akan dihapus dan tidak terkirim. Apakah kamu yakin ingin keluar dari tes?',
+            'Semua data yang telah anda masukkan sebelumnya, mungkin tidak terkirim. Apakah anda yakin ingin keluar dari tes?',
             style: TextStyle(fontFamily: 'Poppins', fontSize: 14, height: 1.4),
           ),
           actionsOverflowButtonSpacing: 5,
@@ -547,7 +554,10 @@ class _CepatTelitiTestScreenState extends State<CepatTelitiTestScreen> {
             Padding(
               padding: const EdgeInsets.only(right: 10),
               child: ClockWidget(
-                timeSeconds: 720,
+                // timeSeconds: 720,
+                timeSeconds: widget.endTime
+                    .difference(DateTime.now())
+                    .inSeconds,
                 redirectTo: () {
                   Get.to(() => CompleteTest(title: "Tes Cepat Teliti"));
                 },

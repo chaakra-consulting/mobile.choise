@@ -30,7 +30,7 @@ Future<bool> showExitConfirmation(BuildContext context) async {
           ],
         ),
         content: const Text(
-          'Jika kamu kembali atau tidak melanjutkan tes, semua data yang telah diisi akan dihapus dan tidak terkirim. Apakah kamu yakin ingin keluar dari tes?',
+          'Semua data yang telah anda masukkan sebelumnya, mungkin tidak terkirim. Apakah anda yakin ingin keluar dari tes?',
           style: TextStyle(fontFamily: 'Poppins', fontSize: 14, height: 1.4),
         ),
         actionsOverflowButtonSpacing: 5,

@@ -40,7 +40,9 @@ class _CfitSub2TestScreenState extends State<CfitSub2TestScreen> {
   List alphabeticOrder = List<String>.from(["a", "b", "c", "d", "e", "f"]);
   // String selectedAlpha = "";
   String selectedAnswer = "";
+  bool loadTime = false;
   int selectedIndex = -1;
+  DateTime? endTime;
 
   List<int> selectedIndices = []; // Track the 2 positions
   String? jawaban;
@@ -53,9 +55,22 @@ class _CfitSub2TestScreenState extends State<CfitSub2TestScreen> {
     setState(() {
       subtes = widget.targetSubtes;
     });
+    loadEndTime();
     loadAnswer();
     loadQuestion();
     redirectToNextTest();
+  }
+
+  loadEndTime() async {
+    setState(() {
+      loadTime = true;
+    });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    DateTime endTime = DateTime.parse(prefs.getString("end_uji_sub2")!);
+    setState(() {
+      this.endTime = endTime;
+      loadTime = false;
+    });
   }
 
   redirectToNextTest() async {
@@ -460,6 +475,7 @@ class _CfitSub2TestScreenState extends State<CfitSub2TestScreen> {
       barrierDismissible: true,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -482,7 +498,7 @@ class _CfitSub2TestScreenState extends State<CfitSub2TestScreen> {
             ],
           ),
           content: const Text(
-            'Jika kamu kembali atau tidak melanjutkan tes, semua data yang telah diisi akan dihapus dan tidak terkirim. Apakah kamu yakin ingin keluar dari tes?',
+            'Semua data yang telah anda masukkan sebelumnya, mungkin tidak terkirim. Apakah anda yakin ingin keluar dari tes?',
             style: TextStyle(fontFamily: 'Poppins', fontSize: 14, height: 1.4),
           ),
           actionsOverflowButtonSpacing: 5,
@@ -592,17 +608,22 @@ class _CfitSub2TestScreenState extends State<CfitSub2TestScreen> {
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 10),
-              child: ClockWidget(
-                timeSeconds: 180,
-                redirectTo: () {
-                  Get.to(() => CfitSub3TestScreen(targetSubtes: 3));
-                },
-                textStyle: TextStyle(
-                  fontFamily: 'Poppins',
-                  color: HexColor('828282'),
-                  fontSize: 15,
-                ),
-              ),
+              child: loadTime
+                  ? CircularProgressIndicator(color: HexColor('FBC02D'))
+                  : ClockWidget(
+                      // timeSeconds: 180,
+                      timeSeconds: endTime!
+                          .difference(DateTime.now())
+                          .inSeconds,
+                      redirectTo: () {
+                        Get.to(() => CfitSub3TestScreen(targetSubtes: 3));
+                      },
+                      textStyle: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: HexColor('828282'),
+                        fontSize: 15,
+                      ),
+                    ),
             ),
           ],
         ),

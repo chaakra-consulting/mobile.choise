@@ -40,19 +40,16 @@ class _ClockWidgetState extends State<ClockWidget> {
         setState(() {
           timer.cancel(); // Stop the timer when it reaches zero
           print("Timer finished");
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                "Waktu Habis",
-                style: TextStyle(color: Colors.white),
-              ),
-              backgroundColor: Color(0xFF38A169),
-              duration: Duration(seconds: 2),
-            ),
-          );
-          // Get.off(() => ExamDashboard());
-          widget.redirectTo!();
         });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Waktu Habis", style: TextStyle(color: Colors.white)),
+            backgroundColor: Color(0xFF38A169),
+            duration: Duration(seconds: 2),
+          ),
+        );
+        // Get.off(() => ExamDashboard());
+        widget.redirectTo!();
       } else {
         setState(() {
           _startSeconds--; // Decrement the time

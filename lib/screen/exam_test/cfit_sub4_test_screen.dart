@@ -42,6 +42,8 @@ class _CfitSub4TestScreenState extends State<CfitSub4TestScreen> {
   // String selectedAlpha = "";
   String selectedAnswer = "";
   int selectedIndex = -1;
+  DateTime? endTime;
+  bool loadTime = false;
 
   @override
   void initState() {
@@ -50,9 +52,24 @@ class _CfitSub4TestScreenState extends State<CfitSub4TestScreen> {
     setState(() {
       subtes = widget.targetSubtes;
     });
+    redirectToNextTest();
+    loadEndTime();
     loadAnswer();
     loadQuestion();
     loadImages();
+  }
+
+  loadEndTime() async {
+    setState(() {
+      loadTime = true;
+    });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    DateTime endTime = DateTime.parse(prefs.getString("end_uji_sub3")!);
+    setState(() {
+      this.endTime = endTime;
+      loadTime = false;
+    });
+    print(endTime.difference(DateTime.now()).inSeconds);
   }
 
   redirectToNextTest() async {
@@ -463,6 +480,7 @@ class _CfitSub4TestScreenState extends State<CfitSub4TestScreen> {
       barrierDismissible: true,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -485,7 +503,7 @@ class _CfitSub4TestScreenState extends State<CfitSub4TestScreen> {
             ],
           ),
           content: const Text(
-            'Jika kamu kembali atau tidak melanjutkan tes, semua data yang telah diisi akan dihapus dan tidak terkirim. Apakah kamu yakin ingin keluar dari tes?',
+            'Semua data yang telah anda masukkan sebelumnya, mungkin tidak terkirim. Apakah anda yakin ingin keluar dari tes?',
             style: TextStyle(fontFamily: 'Poppins', fontSize: 14, height: 1.4),
           ),
           actionsOverflowButtonSpacing: 5,
@@ -595,17 +613,22 @@ class _CfitSub4TestScreenState extends State<CfitSub4TestScreen> {
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 10),
-              child: ClockWidget(
-                timeSeconds: 180,
-                redirectTo: () {
-                  Get.to(() => CompleteTest(title: "Ujian CFIT"));
-                },
-                textStyle: TextStyle(
-                  fontFamily: 'Poppins',
-                  color: HexColor('828282'),
-                  fontSize: 15,
-                ),
-              ),
+              child: loadTime
+                  ? CircularProgressIndicator(color: HexColor('FBC02D'))
+                  : ClockWidget(
+                      timeSeconds: 180,
+                      // timeSeconds: endTime!
+                      //     .difference(DateTime.now())
+                      //     .inSeconds,
+                      redirectTo: () {
+                        Get.off(() => CompleteTest(title: "Ujian CFIT"));
+                      },
+                      textStyle: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: HexColor('828282'),
+                        fontSize: 15,
+                      ),
+                    ),
             ),
           ],
         ),

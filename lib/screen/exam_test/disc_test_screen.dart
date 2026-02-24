@@ -17,7 +17,13 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DISCTestScreen extends StatefulWidget {
-  const DISCTestScreen({super.key});
+  final DateTime endTime;
+  final DateTime startTime;
+  const DISCTestScreen({
+    super.key,
+    required this.endTime,
+    required this.startTime,
+  });
 
   @override
   State<DISCTestScreen> createState() => _DISCTestScreenState();
@@ -430,6 +436,7 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
       barrierDismissible: true,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -452,7 +459,7 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
             ],
           ),
           content: const Text(
-            'Jika kamu kembali atau tidak melanjutkan tes, semua data yang telah diisi akan dihapus dan tidak terkirim. Apakah kamu yakin ingin keluar dari tes?',
+            'Semua data yang telah anda masukkan sebelumnya, mungkin tidak terkirim. Apakah anda yakin ingin keluar dari tes?',
             style: TextStyle(fontFamily: 'Poppins', fontSize: 14, height: 1.4),
           ),
           actionsOverflowButtonSpacing: 5,
@@ -543,7 +550,9 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              _showExitConfirmation(context);
+            },
             icon: Icon(
               CupertinoIcons.left_chevron,
               fontWeight: FontWeight.w700,
@@ -563,7 +572,10 @@ class _DISCTestScreenState extends State<DISCTestScreen> {
             Padding(
               padding: const EdgeInsets.only(right: 10),
               child: ClockWidget(
-                timeSeconds: 1800,
+                // timeSeconds: 1800,
+                timeSeconds: widget.endTime
+                    .difference(DateTime.now())
+                    .inSeconds,
                 redirectTo: () {
                   Get.to(() => CompleteTest(title: "Tes Tipe Kepribadian"));
                 },

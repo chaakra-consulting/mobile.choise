@@ -35,6 +35,8 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
   bool isLoading = false;
   List<CfitQuestion> questions = <CfitQuestion>[];
   List<CfitAnswer> answer = <CfitAnswer>[];
+  DateTime? endTime;
+  bool loadTime = false;
   String keyAnswer = "";
   String keyAnswer2 = "";
   List alphabeticOrder = List<String>.from(["a", "b", "c", "d", "e", "f"]);
@@ -49,9 +51,22 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
     setState(() {
       subtes = widget.targetSubtes;
     });
+    loadEndTime();
     loadAnswer();
     loadQuestion();
     redirectToNextTest();
+  }
+
+  loadEndTime() async {
+    setState(() {
+      loadTime = true;
+    });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    DateTime endTime = DateTime.parse(prefs.getString("end_uji_sub1")!);
+    setState(() {
+      this.endTime = endTime;
+      loadTime = false;
+    });
   }
 
   redirectToNextTest() async {
@@ -444,6 +459,7 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
       barrierDismissible: true,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -466,7 +482,7 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
             ],
           ),
           content: const Text(
-            'Jika kamu kembali atau tidak melanjutkan tes, semua data yang telah diisi akan dihapus dan tidak terkirim. Apakah kamu yakin ingin keluar dari tes?',
+            'Semua data yang telah anda masukkan sebelumnya, mungkin tidak terkirim. Apakah anda yakin ingin keluar dari tes?',
             style: TextStyle(fontFamily: 'Poppins', fontSize: 14, height: 1.4),
           ),
           actionsOverflowButtonSpacing: 5,
@@ -576,17 +592,22 @@ class _CfitTestScreenState extends State<CfitTestScreen> {
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 10),
-              child: ClockWidget(
-                timeSeconds: 180,
-                redirectTo: () {
-                  Get.to(() => CfitSub2TestScreen(targetSubtes: 2));
-                },
-                textStyle: TextStyle(
-                  fontFamily: 'Poppins',
-                  color: HexColor('828282'),
-                  fontSize: 15,
-                ),
-              ),
+              child: loadTime
+                  ? CircularProgressIndicator(color: HexColor('FBC02D'))
+                  : ClockWidget(
+                      // timeSeconds: 180,
+                      timeSeconds: endTime!
+                          .difference(DateTime.now())
+                          .inSeconds,
+                      redirectTo: () {
+                        Get.to(() => CfitSub2TestScreen(targetSubtes: 2));
+                      },
+                      textStyle: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: HexColor('828282'),
+                        fontSize: 15,
+                      ),
+                    ),
             ),
           ],
         ),

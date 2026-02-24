@@ -85,7 +85,7 @@ class ExamCard extends StatelessWidget {
                 onPressed: !status
                     ? null
                     : () {
-                        redirectToExam(title, context);
+                        redirectToExam(title, waktuMulai, waktuAkhir, context);
                       },
                 child: Text(
                   status ? "Kerjakan" : "Berakhir",
