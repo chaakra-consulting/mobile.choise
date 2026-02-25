@@ -7,22 +7,35 @@ import 'package:mobile_choise/screen/exam_test/disc_test_screen.dart';
 import 'package:mobile_choise/screen/exam_test/holland_test_screen.dart';
 import 'package:mobile_choise/screen/exam_test/msdt_test_screen.dart';
 
-void redirectToExam(String name, BuildContext context) {
+void redirectToExam(
+  String name,
+  DateTime startTime,
+  DateTime endTime,
+  BuildContext context,
+) {
   switch (name) {
     case 'Tes Cepat Teliti ':
-      Get.to(() => CepatTelitiTestScreen()); //done
+      Get.to(
+        () => CepatTelitiTestScreen(startTime: startTime, endTime: endTime),
+      ); //done
       break;
     case 'Tes Intelegensi 1 (CFIT) ':
-      Get.to(() => CfitTestScreen(targetSubtes: 1)); //done
+      Get.to(() => CfitTestScreen(targetSubtes: 1));
       break;
     case 'Tes Tipe Kepribadian':
-      Get.to(() => DISCTestScreen());
+      Get.to(
+        () => DISCTestScreen(startTime: startTime, endTime: endTime),
+      ); //done
       break;
     case 'Tes Minat Kerja':
-      Get.to(() => HollandTestScreen()); //done
+      Get.to(
+        () => HollandTestScreen(startTime: startTime, endTime: endTime),
+      ); //done
       break;
     case 'Tes Tipe Kepemimpinan ':
-      Get.to(() => MSDTTestScreen()); //done
+      Get.to(
+        () => MSDTTestScreen(startTime: startTime, endTime: endTime),
+      ); //done
       break;
     default:
       showErrorDialog("Error", "Ada kesalahan", context);

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:mobile_choise/models/CepatTelitiAnswer.dart';
 import 'package:mobile_choise/models/CepatTelitiQuestion.dart';
 import 'package:mobile_choise/screen/components/carousel_card.dart';

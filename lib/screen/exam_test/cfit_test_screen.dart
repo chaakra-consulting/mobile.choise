@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:mobile_choise/models/CFITAnswer.dart';
 import 'package:mobile_choise/models/CFITQuestion.dart';
 import 'package:mobile_choise/screen/components/carousel_card.dart';

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:mobile_choise/models/DISCAnswer.dart';
 import 'package:mobile_choise/models/DISCQuestion.dart';
 import 'package:mobile_choise/screen/components/carousel_card.dart';

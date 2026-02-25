@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:mobile_choise/models/HollandQuestion.dart';
 import 'package:mobile_choise/screen/components/complete_test.dart';
 import 'package:mobile_choise/screen/components/dialog_components.dart';

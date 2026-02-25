@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:material_text_fields/material_text_fields.dart';
 import 'package:material_text_fields/theme/material_text_field_theme.dart';
 import 'package:mobile_choise/screen/auth/login_screen.dart';
@@ -34,6 +34,110 @@ class _DashboardScreenState extends State<DashboardScreen> {
     setState(() {
       userName = name!.split(' ')[0];
     });
+  }
+
+  void deleteUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+  }
+
+  Future<bool> _showExitConfirmation(BuildContext context) async {
+    final textTheme = Theme.of(context).textTheme;
+    final result = await showDialog<bool>(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          title: Row(
+            children: [
+              Icon(
+                Icons.warning_amber_rounded,
+                color: Color(0xFFD69E2E),
+                size: 24,
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                'Peringatan',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          content: const Text(
+            'Apakah Anda yakin ingin keluar?',
+            style: TextStyle(fontFamily: 'Poppins', fontSize: 14, height: 1.4),
+          ),
+          actionsOverflowButtonSpacing: 5,
+          actionsOverflowDirection: VerticalDirection.down,
+          actions: [
+            Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: HexColor('FBC02D')),
+                        ),
+                      ),
+                      child: Text(
+                        'Batal',
+                        style: textTheme.labelMedium?.copyWith(
+                          fontFamily: 'Poppins',
+                          color: HexColor('FBC02D'),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: SizedBox(
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        deleteUserData();
+                        Get.offAll(() => LoginScreen());
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFFD69E2E),
+                        foregroundColor: HexColor("FFFFFF"),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        'Keluar',
+                        style: textTheme.labelMedium?.copyWith(
+                          fontFamily: 'Poppins',
+                          color: HexColor("FFFFFF"),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+    return result ?? false;
   }
 
   @override
@@ -162,8 +266,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        onPressed: () {
-                          Get.offAll(() => LoginScreen());
+                        onPressed: () async {
+                          _showExitConfirmation(context);
                         },
                         child: Text(
                           "Logout",

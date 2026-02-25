@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:mobile_choise/utils/base_url.dart';
 import 'package:mobile_choise/utils/hex_color.dart';
 

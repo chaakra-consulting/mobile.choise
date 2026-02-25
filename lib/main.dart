@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_choise/screen/splash_screen.dart';
 import 'package:mobile_choise/utils/hex_color.dart';
+import 'package:mobile_choise/utils/http_override.dart';
 
 void main() {
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 

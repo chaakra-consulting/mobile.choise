@@ -4,7 +4,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:mobile_choise/models/MSDTAnswer.dart';
 import 'package:mobile_choise/models/MSDTQuestion.dart';
 import 'package:mobile_choise/screen/components/carousel_card.dart';
